@@ -7,6 +7,8 @@ require_once 'Modules/Test/classes/class.ilTestExportPlugin.php';
  *
  * @author    Björn Heyser <info@bjoernheyser.de>
  * @version    $Id$
+ *
+ * @package    Plugins/ExcelMatrixResults
  */
 class ilExcelMatrixResultsPlugin extends ilTestExportPlugin {
 	/**
@@ -41,6 +43,23 @@ class ilExcelMatrixResultsPlugin extends ilTestExportPlugin {
 		return $this->txt( 'excel_matrix_results_label' );
 	}
 	
+	protected function includeClasses()
+	{
+		require_once 'Modules/TestQuestionPool/classes/class.ilAssExcelFormatHelper.php';
+
+		$this->includeClass('class.ilExcelMatrixResultsExportBuilder.php');
+		
+		$this->includeClass('emr/interface.emrAnswerOption.php');
+		$this->includeClass('emr/class.emrSingleChoiceAnswerOption.php');
+		$this->includeClass('emr/class.emrLongMenuAnswerOption.php');
+		$this->includeClass('emr/class.emrTextQuestionAnswerOption.php');
+		
+		$this->includeClass('emr/interface.emrAnswerOptionList.php');
+		$this->includeClass('emr/class.emrSingleChoiceAnswerOptionList.php');
+		$this->includeClass('emr/class.emrLongMenuAnswerOptionList.php');
+		$this->includeClass('emr/class.emrTextQuestionAnswerOptionList.php');
+	}
+	
 	/**
 	 *
 	 * @param ilTestExportFilename $filename        	
@@ -53,10 +72,10 @@ class ilExcelMatrixResultsPlugin extends ilTestExportPlugin {
 			return;
 		}
 
-		require_once 'Modules/TestQuestionPool/classes/class.ilAssExcelFormatHelper.php';
-		$this->includeClass('class.ilExcelMatrixResultsExportBuilder.php');
+		$this->includeClasses();
 		
 		$exportBuilder = new ilExcelMatrixResultsExportBuilder($this->getTest());
-		$exportBuilder->buildExportFile();
+		
+		return $exportBuilder->buildExportFile();
 	}
 }

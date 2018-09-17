@@ -12,6 +12,8 @@ require_once 'Services/Tracking/classes/class.ilLearningProgressBaseGUI.php';
  *
  * @author    Björn Heyser <info@bjoernheyser.de>
  * @version    $Id$
+ * 
+ * @package    Plugins/ExcelMatrixResults
  */
 class ilExcelMatrixResultsExportBuilder extends ilTestExport
 {
@@ -49,6 +51,11 @@ class ilExcelMatrixResultsExportBuilder extends ilTestExport
 	protected function populateQuestionSetConfigXml(ilXmlWriter $xmlWriter) {}
 	protected function getQuestionsQtiXml() {}
 	
+	protected function getFixedFilename()
+	{
+		return str_replace($this->getExtension(), "xlsx", $this->filename);
+	}
+	
 	/**
 	 * MAIN EXPORT FUNCTION
 	 * 
@@ -56,15 +63,33 @@ class ilExcelMatrixResultsExportBuilder extends ilTestExport
 	 */
 	public function buildExportFile()
 	{
-		$worksheet = new ilAssExcelFormatHelper();
-		$worksheet->addSheet($this->lang->txt('tst_results'));
+		$excel = new ilAssExcelFormatHelper();
+		$this->addTestPassMatrixWorkSheet($excel);
+		
+		$filename = ilUtil::ilTempnam();
+		$excel->writeToFile($filename);
+		
+		ilFileUtils::rename($filename.'xlsx',
+			$this->export_dir . "/" . $this->getFixedFilename()
+		);
+		
+		return $this->export_dir."/".$this->getFixedFilename();
+	}
+	
+	/**
+	 * @param ilAssExcelFormatHelper $excel
+	 */
+	protected function addTestPassMatrixWorkSheet(ilAssExcelFormatHelper $excel)
+	{
+		$excel->addSheet($this->lang->txt('tst_results'));
 		
 		foreach($this->getQuestions() as $questionId => $questionOBJ)
 		{
+			$exportAnswerOptionList = $this->getExportAnswerOptionList($questionOBJ);
+			$exportAnswerOptionList->initialise($this->participantData->getActiveIds());
 			
-			foreach($answers as $answer)
+			foreach($exportAnswerOptionList as $expAnswerOption)
 			{
-				
 				foreach($this->participantData->getActiveIds() as $activeId)
 				{
 					
@@ -98,6 +123,56 @@ class ilExcelMatrixResultsExportBuilder extends ilTestExport
 		}
 		
 		return $questions;
+	}
+	
+	/**
+	 * @param assQuestion $questionOBJ
+	 * @return emrAnswerOptionList
+	 */
+	protected function getExportAnswerOptionList(assQuestion $questionOBJ)
+	{
+		switch($questionOBJ->getQuestionType())
+		{
+			case 'assSingleChoice':
+				$exportAnswerOptionList = new emrSingleChoiceAnswerOptionList($questionOBJ);
+				break;
+			case 'assLongMenu':
+				$exportAnswerOptionList = new emrLongMenuAnswerOptionList($questionOBJ);
+				break;
+			case 'assTextQuestion':
+				$exportAnswerOptionList = new emrTextQuestionAnswerOptionList($questionOBJ);
+				break;
+		}
+		
+		$exportAnswerOptionList->initialise();
+		
+		return $exportAnswerOptionList;
+	}
+	
+	/**
+	 * @param assSingleChoice $questionOBJ
+	 * @return emrSingleChoiceAnswerOption[]
+	 */
+	protected function getExportAnswerOptionsForSingleChoice(assSingleChoice $questionOBJ)
+	{
+		$expAnswerOptions = array();
+		
+		foreach($questionOBJ->getAnswers() as $scOption)
+		{
+			
+		}
+		
+		return $expAnswerOptions;
+	}
+	
+	protected function getExportAnswerOptionsForLongMenu(assLongMenu $questionOBJ)
+	{
+		
+	}
+	
+	protected function getExportAnswerOptionsForTextQuestion(assTextQuestion $questionOBJ)
+	{
+		
 	}
 	
 	/**

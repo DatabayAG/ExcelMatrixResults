@@ -1,1 +1,2 @@
 excel_matrix_results_label#:#Erstelle Excel Matrix Ergebnis Export
+failure_msg_only_fixed_tests#:#Es werden nur Tests mit fester Fragennauswahl unterstützt.
