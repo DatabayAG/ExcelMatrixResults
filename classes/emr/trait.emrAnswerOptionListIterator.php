@@ -10,10 +10,28 @@ trait emrAnswerOptionListIterator
 	
 	/**
 	 * @param emrAnswerOption $answerOption
+	 * @param string $key
 	 */
-	protected function addAnswerOption(emrAnswerOption $answerOption)
+	protected function addAnswerOption(emrAnswerOption $answerOption, $key)
 	{
-		$this->answerOptions[] = $answerOption;
+		$this->answerOptions[$key] = $answerOption;
+	}
+	
+	/**
+	 * @param string $key
+	 */
+	protected function getAnswerOption($key)
+	{
+		return $this->answerOptions[$key];
+	}
+	
+	/**
+	 * @param $key
+	 * @return bool
+	 */
+	protected function answerOptionExists($key)
+	{
+		return strlen($key) && isset($this->answerOptions[$key]);
 	}
 	
 	/**

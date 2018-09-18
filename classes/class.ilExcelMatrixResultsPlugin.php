@@ -49,15 +49,22 @@ class ilExcelMatrixResultsPlugin extends ilTestExportPlugin {
 
 		$this->includeClass('class.ilExcelMatrixResultsExportBuilder.php');
 		
-		$this->includeClass('emr/interface.emrAnswerOption.php');
-		$this->includeClass('emr/class.emrSingleChoiceAnswerOption.php');
-		$this->includeClass('emr/class.emrLongMenuAnswerOption.php');
-		$this->includeClass('emr/class.emrTextQuestionAnswerOption.php');
+		$this->includeClass('emr/class.emrScoredPassLookup.php');
 		
 		$this->includeClass('emr/interface.emrAnswerOptionList.php');
+		$this->includeClass('emr/trait.emrAnswerOptionListIterator.php');
 		$this->includeClass('emr/class.emrSingleChoiceAnswerOptionList.php');
 		$this->includeClass('emr/class.emrLongMenuAnswerOptionList.php');
 		$this->includeClass('emr/class.emrTextQuestionAnswerOptionList.php');
+
+		$this->includeClass('emr/class.emrAnswerOption.php');
+		
+		$this->includeClass('emr/interface.emrExcelRangeRenderer.php');
+		$this->includeClass('emr/class.emrParticipantsHeaderRenderer.php');
+		$this->includeClass('emr/class.emrExportMatrixRendererAbstract.php');
+		$this->includeClass('emr/class.emrSingleChoiceExportMatrixRenderer.php');
+		$this->includeClass('emr/class.emrLongMenuExportMatrixRenderer.php');
+		$this->includeClass('emr/class.emrTextQuestionExportMatrixRenderer.php');
 	}
 	
 	/**
@@ -75,6 +82,7 @@ class ilExcelMatrixResultsPlugin extends ilTestExportPlugin {
 		$this->includeClasses();
 		
 		$exportBuilder = new ilExcelMatrixResultsExportBuilder($this->getTest());
+		$exportBuilder->ensureExistingExportDirectory();
 		
 		return $exportBuilder->buildExportFile();
 	}

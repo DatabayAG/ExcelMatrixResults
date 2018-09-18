@@ -43,6 +43,7 @@ class ilExcelMatrixResultsExportBuilder extends ilTestExport
 		
 		$this->participantData = new ilTestParticipantData($db, $this->lang);
 		$this->participantData->load($this->test_obj->getTestId());
+		
 	}
 	
 	// never used methods dealing with test object export stuff this class is never used for
@@ -50,6 +51,20 @@ class ilExcelMatrixResultsExportBuilder extends ilTestExport
 	protected function getQuestionIds() {}
 	protected function populateQuestionSetConfigXml(ilXmlWriter $xmlWriter) {}
 	protected function getQuestionsQtiXml() {}
+	
+	public function ensureExistingExportDirectory()
+	{
+		global $DIC; /* @var ILIAS\DI\Container $DIC */
+		
+		$exportDirectory = str_replace(
+			ilUtil::getDataDir().'/', '', $this->export_dir
+		);
+		
+		if( !$DIC->filesystem()->storage()->hasDir($exportDirectory) )
+		{
+			$DIC->filesystem()->storage()->createDir($exportDirectory);
+		}
+	}
 	
 	protected function getFixedFilename()
 	{
@@ -69,7 +84,7 @@ class ilExcelMatrixResultsExportBuilder extends ilTestExport
 		$filename = ilUtil::ilTempnam();
 		$excel->writeToFile($filename);
 		
-		ilFileUtils::rename($filename.'xlsx',
+		ilFileUtils::rename($filename.'.xlsx',
 			$this->export_dir . "/" . $this->getFixedFilename()
 		);
 		
@@ -83,18 +98,22 @@ class ilExcelMatrixResultsExportBuilder extends ilTestExport
 	{
 		$excel->addSheet($this->lang->txt('tst_results'));
 		
+		$renderer = $this->getParticipantsHeaderRenderer();
+		$lastRow = $renderer->render($excel, $firstRow = 1);
+		
+		$scoredPassLookup = new emrScoredPassLookup();
+		
 		foreach($this->getQuestions() as $questionId => $questionOBJ)
 		{
 			$exportAnswerOptionList = $this->getExportAnswerOptionList($questionOBJ);
-			$exportAnswerOptionList->initialise($this->participantData->getActiveIds());
+			$exportAnswerOptionList->initialise(
+				$this->participantData->getActiveIds(), $scoredPassLookup
+			);
 			
-			foreach($exportAnswerOptionList as $expAnswerOption)
-			{
-				foreach($this->participantData->getActiveIds() as $activeId)
-				{
-					
-				}
-			}
+			$exportMatrixRenderer = $this->getExportMatrixRenderer($questionOBJ);
+			$exportMatrixRenderer->setAnswerOptionList($exportAnswerOptionList);
+			
+			$lastRow = $exportMatrixRenderer->render($excel, $lastRow + 1);
 		}
 	}
 	
@@ -103,11 +122,17 @@ class ilExcelMatrixResultsExportBuilder extends ilTestExport
 	 */
 	protected function getQuestions()
 	{
+		$questionIds = array();
+		foreach($this->test_obj->getTestQuestions() as $q)
+		{ $questionIds[] = $q['question_id']; }
+		
 		global $DIC; /* @var ILIAS\DI\Container $DIC */
 		global $ilPluginAdmin; /* @var ilPluginAdmin $ilPluginAdmin */
 		
 		$list = new ilAssQuestionList($DIC->database(), $DIC->language(), $ilPluginAdmin);
 		$list->setParentObjId($this->test_obj->getId());
+		$list->setQuestionInstanceTypeFilter(null);
+		$list->setIncludeQuestionIdsFilter($questionIds);
 		$list->load();
 		
 		$questions = array();
@@ -123,6 +148,18 @@ class ilExcelMatrixResultsExportBuilder extends ilTestExport
 		}
 		
 		return $questions;
+	}
+	
+	/**
+	 * @return emrParticipantsHeaderRenderer
+	 */
+	protected function getParticipantsHeaderRenderer()
+	{
+		$renderer = new emrParticipantsHeaderRenderer();
+		$renderer->setTestOBJ($this->test_obj);
+		$renderer->setParticipantData($this->participantData);
+		
+		return $renderer;
 	}
 	
 	/**
@@ -142,37 +179,33 @@ class ilExcelMatrixResultsExportBuilder extends ilTestExport
 			case 'assTextQuestion':
 				$exportAnswerOptionList = new emrTextQuestionAnswerOptionList($questionOBJ);
 				break;
+			default: $exportAnswerOptionList = null;
 		}
-		
-		$exportAnswerOptionList->initialise();
 		
 		return $exportAnswerOptionList;
 	}
 	
 	/**
-	 * @param assSingleChoice $questionOBJ
-	 * @return emrSingleChoiceAnswerOption[]
+	 * @param assQuestion $questionOBJ
+	 * @return emrExportMatrixRendererAbstract
 	 */
-	protected function getExportAnswerOptionsForSingleChoice(assSingleChoice $questionOBJ)
+	protected function getExportMatrixRenderer(assQuestion $questionOBJ)
 	{
-		$expAnswerOptions = array();
-		
-		foreach($questionOBJ->getAnswers() as $scOption)
+		switch($questionOBJ->getQuestionType())
 		{
-			
+			case 'assSingleChoice':
+				$exportMatrixRenderer = new emrSingleChoiceExportMatrixRenderer($questionOBJ);
+				break;
+			case 'assLongMenu':
+				$exportMatrixRenderer = new emrLongMenuExportMatrixRenderer($questionOBJ);
+				break;
+			case 'assTextQuestion':
+				$exportMatrixRenderer = new emrTextQuestionExportMatrixRenderer($questionOBJ);
+				break;
+			default: $exportMatrixRenderer = null;
 		}
 		
-		return $expAnswerOptions;
-	}
-	
-	protected function getExportAnswerOptionsForLongMenu(assLongMenu $questionOBJ)
-	{
-		
-	}
-	
-	protected function getExportAnswerOptionsForTextQuestion(assTextQuestion $questionOBJ)
-	{
-		
+		return $exportMatrixRenderer;
 	}
 	
 	/**
@@ -181,7 +214,7 @@ class ilExcelMatrixResultsExportBuilder extends ilTestExport
 	 */
 	protected function isSupportedQuestionType($questionType)
 	{
-		return in_array($this->supportedQuestionTypes, $questionType);
+		return in_array($questionType, $this->supportedQuestionTypes);
 	}
 	
 	/**
@@ -682,5 +715,4 @@ class ilExcelMatrixResultsExportBuilder extends ilTestExport
 			return $excelfile . '.xlsx';
 		}
 	}
-	
 }

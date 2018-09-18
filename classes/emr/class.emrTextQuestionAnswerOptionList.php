@@ -27,4 +27,26 @@ class emrTextQuestionAnswerOptionList implements emrAnswerOptionList, Iterator
 	{
 		$this->questionOBJ = $questionOBJ;
 	}
+	
+	/**
+	 * @param integer[] $activeIds
+	 * @param emrScoredPassLookup $scoredPassLoopup
+	 */
+	public function initialise($activeIds, emrScoredPassLookup $scoredPassLoopup)
+	{
+		foreach($activeIds as $activeId)
+		{
+			$pass = $scoredPassLoopup->get($activeId);
+			$rows = $this->questionOBJ->getSolutionValues($activeId, $pass);
+			
+			$answerOption = new emrAnswerOption();
+			
+			if( count($rows) )
+			{
+				$answerOption->setTitle( $rows[0]['value1'] );
+			}
+			
+			$this->addAnswerOption($answerOption, $activeId);
+		}
+	}
 }

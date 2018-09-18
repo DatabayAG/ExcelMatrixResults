@@ -9,8 +9,9 @@ interface emrAnswerOptionList
 	public function __construct(assQuestion $questionOBJ);
 	
 	/**
-	 * @param integer $pass
+	 * @param integer[] $activeIds
+	 * @param emrScoredPassLookup $scoredPassLoopup
 	 * @return void
 	 */
-	public function initialise($activeIds);
+	public function initialise($activeIds, emrScoredPassLookup $scoredPassLoopup);
 }
