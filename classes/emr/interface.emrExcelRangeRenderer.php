@@ -4,9 +4,9 @@
 interface emrExcelRangeRenderer
 {
 	/**
-	 * @param ilAssExcelFormatHelper $excel
+	 * @param ilMatrixResultsExportExcel $excel
 	 * @param integer $firstRow
 	 * @return integer $lastRow
 	 */
-	public function render(ilAssExcelFormatHelper $excel, $firstRow);
+	public function render(ilMatrixResultsExportExcel $excel, $firstRow);
 }

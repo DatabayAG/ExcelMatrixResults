@@ -11,6 +11,11 @@
 class emrSingleChoiceExportMatrixRenderer extends emrExportMatrixRendererAbstract
 {
 	/**
+	 * @var emrSingleChoiceAnswerOptionList
+	 */
+	protected $answerOptionList;
+
+	/**
 	 * @var assSingleChoice
 	 */
 	protected $questionOBJ;
@@ -25,14 +30,34 @@ class emrSingleChoiceExportMatrixRenderer extends emrExportMatrixRendererAbstrac
 	}
 	
 	/**
-	 * @param ilAssExcelFormatHelper $excel
+	 * @return string
+	 */
+	protected function getQuestionTypeLabel()
+	{
+		return $this->getPlugin()->txt('qst_type_label_singlechoice');
+	}
+	
+	/**
+	 * @param ilMatrixResultsExportExcel $excel
 	 * @param int $firstRow
 	 * @return int $lastRow
 	 */
-	public function render(ilAssExcelFormatHelper $excel, $firstRow)
+	public function render(ilMatrixResultsExportExcel $excel, $firstRow)
 	{
-		$excel->setCellByCoordinates($excel->getColumnCoord(0).$firstRow, __CLASS__);
+		$row = $firstRow;
 		
-		return $firstRow;
+		$this->renderFrontBorder($excel, $row);
+		
+		$this->renderQuestionTitle($excel, $row, $this->questionOBJ->getTitle());
+
+		$this->renderQuestionType($excel, ++$row);
+		$this->renderQuestionHeader($excel, $row);
+		
+		$this->renderAnswerOptionLabels($excel, ++$row);
+		$this->renderAnswerOptionPoints($excel, $row);
+		$this->renderAnswerOptionFrequencyFormula($excel, $row);
+		$this->renderParticipantsAnswerings($excel, $row);
+		
+		return $firstRow + $this->getAnswerOptionList()->getNumAnswers() + 3;
 	}
 }

@@ -46,7 +46,8 @@ class ilExcelMatrixResultsPlugin extends ilTestExportPlugin {
 	protected function includeClasses()
 	{
 		require_once 'Modules/TestQuestionPool/classes/class.ilAssExcelFormatHelper.php';
-
+		$this->includeClass('class.ilMatrixResultsExportExcel.php');
+		
 		$this->includeClass('class.ilExcelMatrixResultsExportBuilder.php');
 		
 		$this->includeClass('emr/class.emrScoredPassLookup.php');
@@ -60,7 +61,8 @@ class ilExcelMatrixResultsPlugin extends ilTestExportPlugin {
 		$this->includeClass('emr/class.emrAnswerOption.php');
 		
 		$this->includeClass('emr/interface.emrExcelRangeRenderer.php');
-		$this->includeClass('emr/class.emrParticipantsHeaderRenderer.php');
+		$this->includeClass('emr/class.emrExportHeaderRenderer.php');
+		$this->includeClass('emr/class.emrQuestionGroupHeaderRenderer.php');
 		$this->includeClass('emr/class.emrExportMatrixRendererAbstract.php');
 		$this->includeClass('emr/class.emrSingleChoiceExportMatrixRenderer.php');
 		$this->includeClass('emr/class.emrLongMenuExportMatrixRenderer.php');
@@ -82,6 +84,7 @@ class ilExcelMatrixResultsPlugin extends ilTestExportPlugin {
 		$this->includeClasses();
 		
 		$exportBuilder = new ilExcelMatrixResultsExportBuilder($this->getTest());
+		$exportBuilder->setPlugin($this);
 		$exportBuilder->ensureExistingExportDirectory();
 		
 		return $exportBuilder->buildExportFile();

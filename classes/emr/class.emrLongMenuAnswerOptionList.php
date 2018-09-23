@@ -58,7 +58,7 @@ class emrLongMenuAnswerOptionList implements emrAnswerOptionList, Iterator
 	public function initialise($activeIds, emrScoredPassLookup $scoredPassLoopup)
 	{
 		$this->initCorrectAnswers();
-		$this->initWrongAnswers();
+		//$this->initWrongAnswers();
 		
 		foreach($activeIds as $activeId)
 		{

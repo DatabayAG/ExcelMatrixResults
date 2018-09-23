@@ -25,14 +25,40 @@ class emrTextQuestionExportMatrixRenderer extends emrExportMatrixRendererAbstrac
 	}
 	
 	/**
-	 * @param ilAssExcelFormatHelper $excel
+	 * @return string
+	 */
+	protected function getQuestionTypeLabel()
+	{
+		return $this->getPlugin()->txt('qst_type_label_textquestion');
+	}
+	
+	/**
+	 * @param ilMatrixResultsExportExcel $excel
 	 * @param int $firstRow
 	 * @return int $lastRow
 	 */
-	public function render(ilAssExcelFormatHelper $excel, $firstRow)
+	public function render(ilMatrixResultsExportExcel $excel, $firstRow)
 	{
-		$excel->setCellByCoordinates($excel->getColumnCoord(0).$firstRow, __CLASS__);
+		$row = $firstRow;
 		
-		return $firstRow;
+		$this->renderFrontBorder($excel, $row);
+		
+		$this->renderQuestionTitle($excel, $row, $this->questionOBJ->getTitle());
+		
+		$this->renderQuestionType($excel, ++$row);
+
+		return $firstRow + 1 + 3;
+	}
+	
+	/**
+	 * @param ilMatrixResultsExportExcel $excel
+	 * @param int $firstRow
+	 */
+	protected function renderFrontBorder(ilMatrixResultsExportExcel $excel, $firstRow)
+	{
+		for($row = $firstRow, $max = $firstRow + 1 + 3; $row <= $max; $row++)
+		{
+			$excel->setBorderRight($excel->getCoordByColumnAndRow(0, $row), true);
+		}
 	}
 }

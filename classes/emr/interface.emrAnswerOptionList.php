@@ -14,4 +14,9 @@ interface emrAnswerOptionList
 	 * @return void
 	 */
 	public function initialise($activeIds, emrScoredPassLookup $scoredPassLoopup);
+	
+	/**
+	 * @return int
+	 */
+	public function getNumAnswers();
 }

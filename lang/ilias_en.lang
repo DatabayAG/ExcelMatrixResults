@@ -1,2 +1,7 @@
 excel_matrix_results_label#:#Create Excel Matrix Results Export
 failure_msg_only_fixed_tests#:#Tests with fixed question set are supported only.
+points_header#:#Points
+frequency_header#:#Frequency
+qst_type_label_longmenu#:#(Type: LM%s)
+qst_type_label_singlechoice#:#(Type: SC)
+qst_type_label_textquestion#:#(Type: Essay)

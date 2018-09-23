@@ -1,2 +1,7 @@
 excel_matrix_results_label#:#Erstelle Excel Matrix Ergebnis Export
 failure_msg_only_fixed_tests#:#Es werden nur Tests mit fester Fragennauswahl unterstützt.
+points_header#:#Punkte
+frequency_header#:#Häufigkeit
+qst_type_label_longmenu#:#(Typ: LM%s)
+qst_type_label_singlechoice#:#(Typ: SC)
+qst_type_label_textquestion#:#(Typ: Freitext)
