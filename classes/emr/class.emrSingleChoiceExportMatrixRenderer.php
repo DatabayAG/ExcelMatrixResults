@@ -58,6 +58,14 @@ class emrSingleChoiceExportMatrixRenderer extends emrExportMatrixRendererAbstrac
 		$this->renderAnswerOptionFrequencyFormula($excel, $row);
 		$this->renderParticipantsAnswerings($excel, $row);
 		
+		$numAnswerOptions = $this->answerOptionList->getNumAnswers();
+		
+		$this->renderTotalPoints($excel, $row + $numAnswerOptions,
+			$row, $row + $numAnswerOptions - 1
+		);
+		
+		$this->qstPointsRowCollector->addTotalQuestionPointsRow($row + $numAnswerOptions);
+		
 		return $firstRow + $this->getAnswerOptionList()->getNumAnswers() + 3;
 	}
 }

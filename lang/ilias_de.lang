@@ -1,7 +1,17 @@
 excel_matrix_results_label#:#Erstelle Excel Matrix Ergebnis Export
 failure_msg_only_fixed_tests#:#Es werden nur Tests mit fester Fragennauswahl unterstützt.
+participants_workingtime#:#Bearbeitungszeit
+participants_lastname#:#Nachname
+participants_firstname#:#Vorname
+participants_login#:#Login
+summary_participants_points#:#Gesamtpunkte
+summary_question_count#:#Fragenanzahl
+summary_maximum_points#:#Max Punkte
+summary_minimum_points#:#Min Punkte
+summary_average_points#:#Durchschnitt
 points_header#:#Punkte
 frequency_header#:#Häufigkeit
 qst_type_label_longmenu#:#(Typ: LM%s)
 qst_type_label_singlechoice#:#(Typ: SC)
-qst_type_label_textquestion#:#(Typ: Freitext)
+qst_type_label_textquestion#:#(Typ: Frei)
+answer_option_label_textquestion#:#abc

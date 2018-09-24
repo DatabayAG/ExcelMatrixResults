@@ -13,7 +13,9 @@ class ilMatrixResultsExportExcel extends ilAssExcelFormatHelper
 	/**
 	 * colors
 	 */
+	const COLOR_GREY = 'C0C0C0';
 	const COLOR_LIGHT_BLUE = 'ccffff';
+	const COLOR_LIGHT_YELLOW = 'ffff99';
 	
 	/**
 	 * Save workbook to file
@@ -30,13 +32,52 @@ class ilMatrixResultsExportExcel extends ilAssExcelFormatHelper
 	}
 	
 	/**
+	 * NOT set all column autosize
+	 */
+	public function setGlobalAutoSize()
+	{
+		// do nothing - let us decide for column widths our self
+	}
+	
+	/**
+	 * @param string $coord
+	 */
+	public function setFirstNonFreezedCell($coord)
+	{
+		$this->workbook->getActiveSheet()->freezePane($coord);
+	}
+	
+	/**
 	 * @param int $col
-	 * @param int $width
+	 * @param float $width
 	 */
 	public function setColumnWidth($col, $width)
 	{
 		$col = $this->getColumnCoord($col);
-		$this->workbook->getActiveSheet()->getColumnDimension($col)->setAutoSize(false)->setWidth($width);
+		$this->workbook->getActiveSheet()->getColumnDimension($col)->setAutoSize(false);
+		$this->workbook->getActiveSheet()->getColumnDimension($col)->setWidth($width);
+	}
+	
+	public function setAlignTop($coords)
+	{
+		$this->workbook->getActiveSheet()->getStyle($coords)->getAlignment()->setVertical(
+			PHPExcel_Style_Alignment::VERTICAL_TOP
+		);
+	}
+	
+	public function setAlignRight($coords)
+	{
+		$this->workbook->getActiveSheet()->getStyle($coords)->getAlignment()->setHorizontal(
+			PHPExcel_Style_Alignment::HORIZONTAL_RIGHT
+		);
+	}
+	
+	/**
+	 * @param float $width
+	 */
+	public function setDefaultColumnWidth($width)
+	{
+		$this->workbook->getActiveSheet()->getDefaultColumnDimension()->setWidth($width);
 	}
 	
 	/**

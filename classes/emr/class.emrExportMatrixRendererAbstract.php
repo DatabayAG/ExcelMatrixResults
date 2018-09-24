@@ -29,12 +29,33 @@ abstract class emrExportMatrixRendererAbstract implements emrExcelRangeRenderer
 	 * @var int
 	 */
 	protected $subIndex = 0;
+	
+	/**
+	 * @var emrTotalQuestionPointsRowCollector
+	 */
+	protected $qstPointsRowCollector;
 
 	/**
 	 * emrExportMatrixRenderer constructor.
 	 * @param assQuestion $questionOBJ
 	 */
 	abstract public function __construct(assQuestion $questionOBJ);
+	
+	/**
+	 * @return emrTotalQuestionPointsRowCollector
+	 */
+	public function getQstPointsRowCollector()
+	{
+		return $this->qstPointsRowCollector;
+	}
+	
+	/**
+	 * @param emrTotalQuestionPointsRowCollector $qstPointsRowCollector
+	 */
+	public function setQstPointsRowCollector($qstPointsRowCollector)
+	{
+		$this->qstPointsRowCollector = $qstPointsRowCollector;
+	}
 	
 	/**
 	 * @return ilExcelMatrixResultsPlugin
@@ -110,7 +131,7 @@ abstract class emrExportMatrixRendererAbstract implements emrExcelRangeRenderer
 		
 		for($row = $firstRow, $max = $firstRow + $numAnswers + 3; $row <= $max; $row++)
 		{
-			$excel->setBorderRight($excel->getCoordByColumnAndRow(0, $row), true);
+			$excel->setBorderRight($excel->getCoordByColumnAndRow(0, $row));
 		}
 	}
 	
@@ -276,5 +297,45 @@ abstract class emrExportMatrixRendererAbstract implements emrExcelRangeRenderer
 		$endCoord = $excel->getCoordByColumnAndRow($col + $numParticipants, $row);
 		
 		return "=SUM($startCoord:$endCoord)";
+	}
+	
+	/**
+	 * @param ilMatrixResultsExportExcel $excel
+	 * @param int $pointsCol
+	 * @param int $participantCol
+	 * @param int $startRow
+	 * @param int $endRow
+	 * @return string
+	 */
+	protected function getParticipantQuestionPointsFormula(ilMatrixResultsExportExcel $excel, $pointsCol, $participantCol, $startRow, $endRow)
+	{
+		$pointsStartCoord = $excel->getCoordByColumnAndRow($pointsCol, $startRow);
+		$pointsEndCoord = $excel->getCoordByColumnAndRow($pointsCol, $endRow);
+		
+		$participantStartCoord = $excel->getCoordByColumnAndRow($participantCol, $startRow);
+		$participantEndCoord = $excel->getCoordByColumnAndRow($participantCol, $endRow);
+		
+		return "=MIN(SUMPRODUCT($pointsStartCoord:$pointsEndCoord,$participantStartCoord:$participantEndCoord),1)";
+	}
+	
+	protected function renderTotalPoints(ilMatrixResultsExportExcel $excel, $curRow, $firstRow, $lastRow)
+	{
+		$pointsCol = 4;
+		$firstCol = 6;
+		$lastCol = $firstCol + count($this->participantData->getActiveIds()) - 1;
+		
+		for($col = $firstCol; $col <= $lastCol; $col++)
+		{
+			$cellCoord = $excel->getCoordByColumnAndRow($col, $curRow);
+			
+			$formula = $this->getParticipantQuestionPointsFormula(
+				$excel, $pointsCol, $col, $firstRow, $lastRow
+			);
+			
+			$excel->setFormulaByCoordinates($cellCoord, $formula);
+			$excel->setBorders($cellCoord, true, true, true, true);
+			$excel->setColors($cellCoord, ilMatrixResultsExportExcel::COLOR_LIGHT_YELLOW);
+			$excel->setBold($cellCoord);
+		}
 	}
 }

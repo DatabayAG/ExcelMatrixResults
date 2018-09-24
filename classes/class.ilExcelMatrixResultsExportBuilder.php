@@ -117,8 +117,12 @@ class ilExcelMatrixResultsExportBuilder extends ilTestExport
 	protected function addTestPassMatrixWorkSheet(ilMatrixResultsExportExcel $excel)
 	{
 		$excel->addSheet($this->lang->txt('tst_results'));
+
+		$this->setColumnsDimension($excel);
+		$this->freezeLabelColsAndRows($excel);
 		
 		$scoredPassLookup = new emrScoredPassLookup();
+		$totalQstPointsRowCollector = new emrTotalQuestionPointsRowCollector();
 		
 		$renderer = $this->getParticipantsHeaderRenderer($scoredPassLookup);
 		$lastRow = $renderer->render($excel, $firstRow = 1);
@@ -144,6 +148,7 @@ class ilExcelMatrixResultsExportBuilder extends ilTestExport
 				);
 				
 				$exportMatrixRenderer = $this->getExportMatrixRenderer($questionOBJ);
+				$exportMatrixRenderer->setQstPointsRowCollector($totalQstPointsRowCollector);
 				$exportMatrixRenderer->setSubIndex($subIndex);
 				$exportMatrixRenderer->setParticipantData($this->participantData);
 				$exportMatrixRenderer->setAnswerOptionList($exportAnswerOptionList);
@@ -152,7 +157,20 @@ class ilExcelMatrixResultsExportBuilder extends ilTestExport
 			}
 		}
 		
-		$this->setColumnsDimension($excel);
+		$summaryRenderer = $this->getExportSummaryRenderer();
+		$summaryRenderer->setQstPointsRowCollector($totalQstPointsRowCollector);
+		$lastRow = $summaryRenderer->render($excel, $lastRow + 2);
+	}
+	
+	/**
+	 * @return emrExportSummaryRenderer
+	 */
+	protected function getExportSummaryRenderer()
+	{
+		$summaryRenderer = new emrExportSummaryRenderer();
+		$summaryRenderer->setPlugin($this->getPlugin());
+		$summaryRenderer->setParticipantData($this->participantData);
+		return $summaryRenderer;
 	}
 	
 	/**
@@ -184,6 +202,7 @@ class ilExcelMatrixResultsExportBuilder extends ilTestExport
 	protected function getParticipantsHeaderRenderer(emrScoredPassLookup $scoredPassLookup)
 	{
 		$renderer = new emrExportHeaderRenderer();
+		$renderer->setPlugin($this->getPlugin());
 		$renderer->setTestOBJ($this->test_obj);
 		$renderer->setParticipantData($this->participantData);
 		$renderer->setScoredPassLoopup($scoredPassLookup);
@@ -288,16 +307,26 @@ class ilExcelMatrixResultsExportBuilder extends ilTestExport
 	
 	protected function setColumnsDimension(ilMatrixResultsExportExcel $excel)
 	{
-		for($col = 0; $col <= 5; $col++)
-		{
-			$excel->setColumnWidth($col, 100);
-		}
+		$excel->setColumnWidth(0, 14.0);
+		$excel->setColumnWidth(1, 10.0);
+		$excel->setColumnWidth(2, 12.0);
+		$excel->setColumnWidth(3, 14.0);
+		$excel->setColumnWidth(4, 9.0);
+		$excel->setColumnWidth(5, 11.0);
 		
 		$lastCol = 5 + count($this->participantData->getActiveIds());
 		
 		for($col = 6; $col <= $lastCol; $col++)
 		{
-			$excel->setColumnWidth($col, 100);
+			$excel->setColumnWidth($col, 9.0);
 		}
+	}
+	
+	/**
+	 * @param ilMatrixResultsExportExcel $excel
+	 */
+	protected function freezeLabelColsAndRows(ilMatrixResultsExportExcel $excel)
+	{
+		$excel->setFirstNonFreezedCell('G5');
 	}
 }

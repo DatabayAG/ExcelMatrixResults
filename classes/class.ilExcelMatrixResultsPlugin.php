@@ -51,6 +51,7 @@ class ilExcelMatrixResultsPlugin extends ilTestExportPlugin {
 		$this->includeClass('class.ilExcelMatrixResultsExportBuilder.php');
 		
 		$this->includeClass('emr/class.emrScoredPassLookup.php');
+		$this->includeClass('emr/class.emrTotalQuestionPointsRowCollector.php');
 		
 		$this->includeClass('emr/interface.emrAnswerOptionList.php');
 		$this->includeClass('emr/trait.emrAnswerOptionListIterator.php');
@@ -62,6 +63,7 @@ class ilExcelMatrixResultsPlugin extends ilTestExportPlugin {
 		
 		$this->includeClass('emr/interface.emrExcelRangeRenderer.php');
 		$this->includeClass('emr/class.emrExportHeaderRenderer.php');
+		$this->includeClass('emr/class.emrExportSummaryRenderer.php');
 		$this->includeClass('emr/class.emrQuestionGroupHeaderRenderer.php');
 		$this->includeClass('emr/class.emrExportMatrixRendererAbstract.php');
 		$this->includeClass('emr/class.emrSingleChoiceExportMatrixRenderer.php');

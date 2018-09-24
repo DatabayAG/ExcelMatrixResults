@@ -1,7 +1,17 @@
 excel_matrix_results_label#:#Create Excel Matrix Results Export
 failure_msg_only_fixed_tests#:#Tests with fixed question set are supported only.
+participants_workingtime#:#Processing Time
+participants_lastname#:#Lastname
+participants_firstname#:#Firtsname
+participants_login#:#Login
+summary_participants_points#:#Overall Points
+summary_question_count#:#Questions
+summary_maximum_points#:#Max Points
+summary_minimum_points#:#Min Points
+summary_average_points#:#Average
 points_header#:#Points
 frequency_header#:#Frequency
 qst_type_label_longmenu#:#(Type: LM%s)
 qst_type_label_singlechoice#:#(Type: SC)
 qst_type_label_textquestion#:#(Type: Essay)
+answer_option_label_textquestion#:#abc

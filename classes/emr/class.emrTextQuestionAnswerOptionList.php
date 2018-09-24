@@ -46,6 +46,8 @@ class emrTextQuestionAnswerOptionList implements emrAnswerOptionList, Iterator
 				$answerOption->setTitle( $rows[0]['value1'] );
 			}
 			
+			$answerOption->addAnsweringActiveId($activeId);
+			
 			$this->addAnswerOption($answerOption, $activeId);
 		}
 	}

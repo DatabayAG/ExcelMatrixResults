@@ -37,7 +37,7 @@ class emrQuestionGroupHeaderRenderer implements emrExcelRangeRenderer
 		
 		$excel->setCellByCoordinates($cellChords, $this->questionGroupTitle);
 		$excel->setBold($cellChords);
-		$excel->setBorderRight($cellChords, true);
+		//$excel->setBorderRight($cellChords, true);
 		
 		return $firstRow;
 	}

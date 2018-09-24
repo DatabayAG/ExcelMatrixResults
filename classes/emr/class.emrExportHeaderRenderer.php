@@ -11,6 +11,11 @@
 class emrExportHeaderRenderer implements emrExcelRangeRenderer
 {
 	/**
+	 * @var ilExcelMatrixResultsPlugin
+	 */
+	protected $plugin;
+	
+	/**
 	 * @var ilObjTest
 	 */
 	protected $testOBJ;
@@ -24,6 +29,22 @@ class emrExportHeaderRenderer implements emrExcelRangeRenderer
 	 * @var emrScoredPassLookup
 	 */
 	protected $scoredPassLoopup;
+	
+	/**
+	 * @return ilExcelMatrixResultsPlugin
+	 */
+	public function getPlugin()
+	{
+		return $this->plugin;
+	}
+	
+	/**
+	 * @param ilExcelMatrixResultsPlugin $plugin
+	 */
+	public function setPlugin($plugin)
+	{
+		$this->plugin = $plugin;
+	}
 	
 	/**
 	 * @return ilObjTest
@@ -81,6 +102,7 @@ class emrExportHeaderRenderer implements emrExcelRangeRenderer
 	public function render(ilMatrixResultsExportExcel $excel, $firstRow)
 	{
 		$row = $this->renderTestTitle($excel, $firstRow);
+		$row = $this->renderParticipantLabels($excel, $row);
 		$row = $this->renderParticipantTimes($excel, $row);
 		$row = $this->renderParticipantNames($excel, ++$row);
 		
@@ -95,16 +117,52 @@ class emrExportHeaderRenderer implements emrExcelRangeRenderer
 	protected function renderTestTitle(ilMatrixResultsExportExcel $excel, $row)
 	{
 		$start = $excel->getCoordByColumnAndRow(0, $row);
-		$end = $excel->getCoordByColumnAndRow(5, $row);
+		$end = $excel->getCoordByColumnAndRow(3, $row + 3);
 		$range = $start.':'.$end;
 		
 		$excel->mergeCells($range);
 		
 		$excel->setBold($start);
 		$excel->setCellByCoordinates($start, $this->getTestOBJ()->getTitle());
+		$excel->setAlignTop($start);
 		
-		$excel->setBorderBottom($range, true);
-		$excel->setBorderRight($end, true);
+		return $row;
+	}
+	
+	
+	/**
+	 * @param ilMatrixResultsExportExcel $excel
+	 */
+	protected function renderParticipantLabels(ilMatrixResultsExportExcel $excel, $row)
+	{
+		$excel->mergeCells(
+			"{$excel->getCoordByColumnAndRow(4, $row + 0)}:{$excel->getCoordByColumnAndRow(5, $row + 0)}"
+		);
+		$excel->mergeCells(
+			"{$excel->getCoordByColumnAndRow(4, $row + 1)}:{$excel->getCoordByColumnAndRow(5, $row + 1)}"
+		);
+		$excel->mergeCells(
+			"{$excel->getCoordByColumnAndRow(4, $row + 2)}:{$excel->getCoordByColumnAndRow(5, $row + 2)}"
+		);
+		$excel->mergeCells(
+			"{$excel->getCoordByColumnAndRow(4, $row + 3)}:{$excel->getCoordByColumnAndRow(5, $row + 3)}"
+		);
+
+		$coord = $excel->getCoordByColumnAndRow(4, $row + 0);
+		$excel->setCellByCoordinates($coord, $this->getPlugin()->txt('participants_workingtime'));
+		$excel->setBold($coord);
+		
+		$coord = $excel->getCoordByColumnAndRow(4, $row + 1);
+		$excel->setCellByCoordinates($coord, $this->getPlugin()->txt('participants_lastname') );
+		$excel->setBold($coord);
+		
+		$coord = $excel->getCoordByColumnAndRow(4, $row + 2);
+		$excel->setCellByCoordinates($coord, $this->getPlugin()->txt('participants_firstname') );
+		$excel->setBold($coord);
+		
+		$coord = $excel->getCoordByColumnAndRow(4, $row + 3);
+		$excel->setCellByCoordinates($coord, $this->getPlugin()->txt('participants_login') );
+		$excel->setBold($coord);
 		
 		return $row;
 	}
@@ -128,8 +186,6 @@ class emrExportHeaderRenderer implements emrExcelRangeRenderer
 			
 			$excel->setCellByCoordinates($cellChord, $excel->formatMinutes($workingTime));
 			
-			$excel->setBorderBottom($cellChord, true);
-			
 			$col++;
 		}
 		
@@ -143,10 +199,6 @@ class emrExportHeaderRenderer implements emrExcelRangeRenderer
 	 */
 	protected function renderParticipantNames(ilMatrixResultsExportExcel $excel, $row)
 	{
-		$excel->setBorderRight($excel->getCoordByColumnAndRow(0, $row + 0), true);
-		$excel->setBorderRight($excel->getCoordByColumnAndRow(0, $row + 1), true);
-		$excel->setBorderRight($excel->getCoordByColumnAndRow(0, $row + 2), true);
-		
 		$col = 6;
 		
 		foreach($this->getParticipantData()->getActiveIds() as $activeId)
