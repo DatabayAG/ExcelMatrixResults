@@ -307,29 +307,48 @@ abstract class emrExportMatrixRendererAbstract implements emrExcelRangeRenderer
 	 * @param int $endRow
 	 * @return string
 	 */
-	protected function getParticipantQuestionPointsFormula(ilMatrixResultsExportExcel $excel, $pointsCol, $participantCol, $startRow, $endRow)
+	protected function getParticipantQuestionPointsFormula(ilMatrixResultsExportExcel $excel, $pointsCol, $participantCol, $row, emrAnswerOptionList $answerOptionList)
 	{
-		$pointsStartCoord = $excel->getCoordByColumnAndRow($pointsCol, $startRow);
-		$pointsEndCoord = $excel->getCoordByColumnAndRow($pointsCol, $endRow);
+		$sums = array();
 		
-		$participantStartCoord = $excel->getCoordByColumnAndRow($participantCol, $startRow);
-		$participantEndCoord = $excel->getCoordByColumnAndRow($participantCol, $endRow);
+		foreach($answerOptionList as $answerOption)
+		{
+			$pointsStartCoord = $excel->getCoordByColumnAndRow($pointsCol, $row);
+			$pointsEndCoord = $excel->getCoordByColumnAndRow($pointsCol, $row);
+			
+			$participantStartCoord = $excel->getCoordByColumnAndRow($participantCol, $row);
+			$participantEndCoord = $excel->getCoordByColumnAndRow($participantCol, $row);
+
+			if( $answerOption->hasPoints() )
+			{
+				$f = "MIN(SUMPRODUCT($pointsStartCoord:$pointsEndCoord,$participantStartCoord:$participantEndCoord),1)";
+			}
+			else
+			{
+				$f = "SUMPRODUCT($pointsStartCoord:$pointsEndCoord,$participantStartCoord:$participantEndCoord)";
+			}
+			
+			$sums[] = $f;
+			$row++;
+		}
 		
-		return "=MIN(SUMPRODUCT($pointsStartCoord:$pointsEndCoord,$participantStartCoord:$participantEndCoord),1)";
+		return "=".implode('+', $sums);
 	}
 	
-	protected function renderTotalPoints(ilMatrixResultsExportExcel $excel, $curRow, $firstRow, $lastRow)
+	protected function renderTotalPoints(ilMatrixResultsExportExcel $excel, $startRow, emrAnswerOptionList $answerOptionList)
 	{
 		$pointsCol = 4;
 		$firstCol = 6;
 		$lastCol = $firstCol + count($this->participantData->getActiveIds()) - 1;
 		
+		$renderRow = $startRow + $answerOptionList->getNumAnswers();
+		
 		for($col = $firstCol; $col <= $lastCol; $col++)
 		{
-			$cellCoord = $excel->getCoordByColumnAndRow($col, $curRow);
+			$cellCoord = $excel->getCoordByColumnAndRow($col, $renderRow);
 			
 			$formula = $this->getParticipantQuestionPointsFormula(
-				$excel, $pointsCol, $col, $firstRow, $lastRow
+				$excel, $pointsCol, $col, $startRow, $answerOptionList
 			);
 			
 			$excel->setFormulaByCoordinates($cellCoord, $formula);

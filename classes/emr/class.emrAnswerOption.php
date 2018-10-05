@@ -81,4 +81,12 @@ class emrAnswerOption
 	{
 		$this->points = $points;
 	}
+	
+	/**
+	 * @return bool
+	 */
+	public function hasPoints()
+	{
+		return $this->getPoints() > 0;
+	}
 }

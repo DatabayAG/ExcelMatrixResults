@@ -74,6 +74,9 @@ trait emrAnswerOptionListIterator
 		return reset($this->answerOptions);
 	}
 	
+	/**
+	 * @return int
+	 */
 	public function getNumAnswers()
 	{
 		return count($this->answerOptions);
