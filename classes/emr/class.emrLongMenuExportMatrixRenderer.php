@@ -55,7 +55,9 @@ class emrLongMenuExportMatrixRenderer extends emrExportMatrixRendererAbstract
 		
 		$this->renderTotalPoints($excel, $row, $this->answerOptionList);
 		
-		$this->qstPointsRowCollector->addTotalQuestionPointsRow($row + $numAnswerOptions);
+		$this->qstPointsRowCollector->addTotalQuestionPointsRow(
+			$row + $this->answerOptionList->getNumAnswers()
+		);
 		
 		return $firstRow + $this->getAnswerOptionList()->getNumAnswers() + 3;
 	}
