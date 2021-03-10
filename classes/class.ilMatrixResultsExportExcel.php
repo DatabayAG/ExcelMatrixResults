@@ -29,7 +29,7 @@ class ilMatrixResultsExportExcel extends ilAssExcelFormatHelper
 	{
 		$a_file = $this->prepareStorage($a_file);
 		
-		$writer = IOFactory::createWriter($this->workbook, $this->format);
+		$writer = IOFactory::createWriter($this->workbook, self::FORMAT_XML);
 		$writer->setPreCalculateFormulas(true);
 		$writer->save($a_file);
 	}
