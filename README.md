@@ -1,11 +1,28 @@
 # Test Results and Learning Progress Export
 
-Export plugin for Test Results incl. Learning Progress. Compatible with ILIAS 5.4.0 - 7.999.
+Export plugin for Test Results incl. Learning Progress.
 
-### Usage ###
-Install the plugin ...
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
+"SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL"
+in this document are to be interpreted as described in
+[RFC 2119](https://www.ietf.org/rfc/rfc2119.txt).
 
-... using git:
+**Table of Contents**
+
+* [Requirements](#requirements)
+* [Installation](#installation)
+    * [Composer](#composer)
+* [Other information](#other-information)
+    * [License](#license)
+
+## Requirements
+
+* PHP: [![Minimum PHP Version](https://img.shields.io/badge/Minimum_PHP-7.0.x-blue.svg)](https://php.net/) [![Maximum PHP Version](https://img.shields.io/badge/Maximum_PHP-7.4.x-blue.svg)](https://php.net/)
+* ILIAS: [![Minimum ILIAS Version](https://img.shields.io/badge/Minimum_ILIAS-5.4.x-orange.svg)](https://ilias.de/) [![Maximum ILIAS Version](https://img.shields.io/badge/Maximum_ILIAS-7.x-orange.svg)](https://ilias.de/)
+
+## Installation
+
+... using Git:
 ```bash
 mkdir -p Customizing/global/plugins/Modules/Test/Export
 cd Customizing/global/plugins/Modules/Test/Export
@@ -22,10 +39,8 @@ rm -f master.zip
 mv ExcelMatrixResults-master ExcelMatrixResults
 ```
 
-Go to the ILIAS plugin administration and activate the plugin.
+## Other information
 
-You now have an additional export option for tests.
+#### License
 
-### Credits ###
-Development for ILIAS by Björn Heyser, Maintainer Test and Assessment.
-
+See [LICENSE](./LICENSE) file in this repository.
