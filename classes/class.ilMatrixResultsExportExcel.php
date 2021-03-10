@@ -2,6 +2,9 @@
 
 /* Copyright (c) 1998-2013 ILIAS open source, Extended GPL, see docs/LICENSE */
 
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Style;
+
 /**
  * @author    Björn Heyser <info@bjoernheyser.de>
  * @version    $Id$
@@ -26,7 +29,7 @@ class ilMatrixResultsExportExcel extends ilAssExcelFormatHelper
 	{
 		$a_file = $this->prepareStorage($a_file);
 		
-		$writer = PHPExcel_IOFactory::createWriter($this->workbook, $this->format);
+		$writer = IOFactory::createWriter($this->workbook, $this->format);
 		$writer->setPreCalculateFormulas(true);
 		$writer->save($a_file);
 	}
@@ -61,14 +64,14 @@ class ilMatrixResultsExportExcel extends ilAssExcelFormatHelper
 	public function setAlignTop($coords)
 	{
 		$this->workbook->getActiveSheet()->getStyle($coords)->getAlignment()->setVertical(
-			PHPExcel_Style_Alignment::VERTICAL_TOP
+			Style\Alignment::VERTICAL_TOP
 		);
 	}
 	
 	public function setAlignRight($coords)
 	{
 		$this->workbook->getActiveSheet()->getStyle($coords)->getAlignment()->setHorizontal(
-			PHPExcel_Style_Alignment::HORIZONTAL_RIGHT
+            Style\Alignment::HORIZONTAL_RIGHT
 		);
 	}
 	
@@ -108,7 +111,7 @@ class ilMatrixResultsExportExcel extends ilAssExcelFormatHelper
 		$style = $this->workbook->getActiveSheet()->getStyle($rangeCoords);
 		
 		$style->getBorders()->getTop()->setBorderStyle(
-			$bold ? PHPExcel_Style_Border::BORDER_THICK : PHPExcel_Style_Border::BORDER_THIN
+			$bold ? Style\Border::BORDER_THICK : Style\Border::BORDER_THIN
 		);
 	}
 	
@@ -121,7 +124,7 @@ class ilMatrixResultsExportExcel extends ilAssExcelFormatHelper
 		$style = $this->workbook->getActiveSheet()->getStyle($rangeCoords);
 		
 		$style->getBorders()->getRight()->setBorderStyle(
-			$bold ? PHPExcel_Style_Border::BORDER_THICK : PHPExcel_Style_Border::BORDER_THIN
+			$bold ? Style\Border::BORDER_THICK : Style\Border::BORDER_THIN
 		);
 	}
 	
@@ -134,7 +137,7 @@ class ilMatrixResultsExportExcel extends ilAssExcelFormatHelper
 		$style = $this->workbook->getActiveSheet()->getStyle($rangeCoords);
 		
 		$style->getBorders()->getBottom()->setBorderStyle(
-			$bold ? PHPExcel_Style_Border::BORDER_THICK : PHPExcel_Style_Border::BORDER_THIN
+			$bold ? Style\Border::BORDER_THICK : Style\Border::BORDER_THIN
 		);
 	}
 	
@@ -147,7 +150,7 @@ class ilMatrixResultsExportExcel extends ilAssExcelFormatHelper
 		$style = $this->workbook->getActiveSheet()->getStyle($rangeCoords);
 		
 		$style->getBorders()->getLeft()->setBorderStyle(
-			$bold ? PHPExcel_Style_Border::BORDER_THICK : PHPExcel_Style_Border::BORDER_THIN
+			$bold ? Style\Border::BORDER_THICK : Style\Border::BORDER_THIN
 		);
 	}
 	
@@ -157,15 +160,11 @@ class ilMatrixResultsExportExcel extends ilAssExcelFormatHelper
 	 */
 	public function setFormulaByCoordinates($coords, $formula)
 	{
-		#$this->workbook->getActiveSheet()->setCellValueExplicit(
-		#	$coords, $formula, PHPExcel_Cell_DataType::TYPE_FORMULA
-		#);
-		
 		$this->workbook->getActiveSheet()->setCellValue($coords, $formula);
 		$this->workbook->getActiveSheet()->getCell($coords)->getOldCalculatedValue();
 		
 		$this->workbook->getActiveSheet()->getStyle($coords)->getAlignment()->setHorizontal(
-			PHPExcel_Style_Alignment::HORIZONTAL_RIGHT
+            Style\Alignment::HORIZONTAL_RIGHT
 		);
 	}
 	
@@ -175,14 +174,10 @@ class ilMatrixResultsExportExcel extends ilAssExcelFormatHelper
 	 */
 	public function setNumberByCoordinates($coords, $number)
 	{
-		#$this->workbook->getActiveSheet()->setCellValueExplicit(
-		#	$coords, $number, PHPExcel_Cell_DataType::TYPE_NUMERIC
-		#);
-		
 		$this->workbook->getActiveSheet()->setCellValue($coords, $number);
 		
 		$this->workbook->getActiveSheet()->getStyle($coords)->getAlignment()->setHorizontal(
-			PHPExcel_Style_Alignment::HORIZONTAL_RIGHT
+            Style\Alignment::HORIZONTAL_RIGHT
 		);
 	}
 }
