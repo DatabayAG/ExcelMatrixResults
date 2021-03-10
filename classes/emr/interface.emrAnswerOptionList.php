@@ -3,20 +3,20 @@
 
 interface emrAnswerOptionList
 {
-	/**
-	 * @param assQuestion $questionOBJ
-	 */
-	public function __construct(assQuestion $questionOBJ);
-	
-	/**
-	 * @param integer[] $activeIds
-	 * @param emrScoredPassLookup $scoredPassLoopup
-	 * @return void
-	 */
-	public function initialise($activeIds, emrScoredPassLookup $scoredPassLoopup);
-	
-	/**
-	 * @return int
-	 */
-	public function getNumAnswers();
+    /**
+     * @param assQuestion $questionOBJ
+     */
+    public function __construct(assQuestion $questionOBJ);
+    
+    /**
+     * @param integer[] $activeIds
+     * @param emrScoredPassLookup $scoredPassLoopup
+     * @return void
+     */
+    public function initialise($activeIds, emrScoredPassLookup $scoredPassLoopup);
+    
+    /**
+     * @return int
+     */
+    public function getNumAnswers();
 }

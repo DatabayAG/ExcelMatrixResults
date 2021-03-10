@@ -3,10 +3,10 @@
 
 interface emrExcelRangeRenderer
 {
-	/**
-	 * @param ilMatrixResultsExportExcel $excel
-	 * @param integer $firstRow
-	 * @return integer $lastRow
-	 */
-	public function render(ilMatrixResultsExportExcel $excel, $firstRow);
+    /**
+     * @param ilMatrixResultsExportExcel $excel
+     * @param integer $firstRow
+     * @return integer $lastRow
+     */
+    public function render(ilMatrixResultsExportExcel $excel, $firstRow);
 }
