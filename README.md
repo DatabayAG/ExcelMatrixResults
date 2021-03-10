@@ -1,6 +1,6 @@
 # Test Results and Learning Progress Export
 
-Export plugin for Test Results incl. Learning Progress. Compatible with ILIAS 5.1.0 - 5.4.999.
+Export plugin for Test Results incl. Learning Progress. Compatible with ILIAS 5.3.0 - 5.3.999.
 
 ### Usage ###
 Install the plugin ...
@@ -9,14 +9,14 @@ Install the plugin ...
 ```bash
 mkdir -p Customizing/global/plugins/Modules/Test/Export
 cd Customizing/global/plugins/Modules/Test/Export
-git clone https://github.com/bheyser/ExcelMatrixResults.git
+git clone https://github.com/DatabayAG/ExcelMatrixResults.git -b release_1-2
 ```
 
 ... from zip file:
 ```bash
 mkdir -p Customizing/global/plugins/Modules/Test/Export
 cd Customizing/global/plugins/Modules/Test/Export
-wget https://github.com/bheyser/ExcelMatrixResults/archive/master.zip
+wget https://github.com/DatabayAG/archive/release_1-2.zip
 unzip master.zip
 rm -f master.zip
 mv ExcelMatrixResults-master ExcelMatrixResults
