@@ -1,0 +1,18 @@
+{
+  "require": {
+    "php": "^7.0.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "ILIAS\\Plugin\\ExcelMatrixResults\\": "./classes"
+    },
+    "classmap": [
+      "./classes"
+    ],
+    "exclude-from-classmap": []
+  },
+  "require-dev": {
+    "captainhook/plugin-composer": "^5.1",
+    "friendsofphp/php-cs-fixer": "^2.17"
+  }
+}
