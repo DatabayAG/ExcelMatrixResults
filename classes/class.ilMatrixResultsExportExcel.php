@@ -93,19 +93,7 @@ class ilMatrixResultsExportExcel extends ilAssExcelFormatHelper
         $secs = (int) ($seconds % 60);
         return sprintf("%02d:%02d", $mins, $secs);
     }
-    
-    /**
-     * @param string $coordinatesRange
-     */
-    public function mergeCells(string $coordinatesRange) : void
-    {
-        if (version_compare(ILIAS_VERSION_NUMERIC, '6.0', '>=')) {
-            parent::mergeCells($coordinatesRange);
-        } else {
-            $this->workbook->getActiveSheet()->mergeCells($coordinatesRange);
-        }
-    }
-    
+
     /**
      * @param string $rangeCoords
      * @param bool $bold
