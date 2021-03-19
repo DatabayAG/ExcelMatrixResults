@@ -95,11 +95,15 @@ class ilMatrixResultsExportExcel extends ilAssExcelFormatHelper
     }
     
     /**
-     * @param string $rangeCoords
+     * @param string $coordinatesRange
      */
-    public function mergeCells($rangeCoords)
+    public function mergeCells(string $coordinatesRange) : void
     {
-        $this->workbook->getActiveSheet()->mergeCells($rangeCoords);
+        if (version_compare(ILIAS_VERSION_NUMERIC, '6.0', '>=')) {
+            parent::mergeCells($coordinatesRange);
+        } else {
+            $this->workbook->getActiveSheet()->mergeCells($coordinatesRange);
+        }
     }
     
     /**
