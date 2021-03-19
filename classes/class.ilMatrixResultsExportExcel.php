@@ -97,13 +97,9 @@ class ilMatrixResultsExportExcel extends ilAssExcelFormatHelper
     /**
      * @param string $coordinatesRange
      */
-    public function mergeCells(string $coordinatesRange) : void
+    public function mergeCells(string $coordinatesRange)
     {
-        if (version_compare(ILIAS_VERSION_NUMERIC, '6.0', '>=')) {
-            parent::mergeCells($coordinatesRange);
-        } else {
-            $this->workbook->getActiveSheet()->mergeCells($coordinatesRange);
-        }
+        $this->workbook->getActiveSheet()->mergeCells($coordinatesRange);
     }
     
     /**
