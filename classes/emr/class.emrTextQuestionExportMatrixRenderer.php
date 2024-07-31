@@ -14,16 +14,7 @@ class emrTextQuestionExportMatrixRenderer extends emrExportMatrixRendererAbstrac
      * @var assTextQuestion
      */
     protected $questionOBJ;
-    
-    /**
-     * emrTextQuestionExportMatrixRenderer constructor.
-     * @param assQuestion $questionOBJ
-     */
-    public function __construct(assQuestion $questionOBJ)
-    {
-        $this->questionOBJ = $questionOBJ;
-    }
-    
+
     /**
      * @return string
      */

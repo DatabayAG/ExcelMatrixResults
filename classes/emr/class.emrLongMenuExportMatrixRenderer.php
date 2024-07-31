@@ -2,6 +2,8 @@
 
 /* Copyright (c) 1998-2013 ILIAS open source, Extended GPL, see docs/LICENSE */
 
+use ILIAS\Refinery\Factory as Refinery;
+
 /**
  * @author    Björn Heyser <info@bjoernheyser.de>
  * @version    $Id$
@@ -14,16 +16,7 @@ class emrLongMenuExportMatrixRenderer extends emrExportMatrixRendererAbstract
      * @var assLongMenu
      */
     protected $questionOBJ;
-    
-    /**
-     * emrLongMenuExportMatrixRenderer constructor.
-     * @param assQuestion $questionOBJ
-     */
-    public function __construct(assQuestion $questionOBJ)
-    {
-        $this->questionOBJ = $questionOBJ;
-    }
-    
+
     /**
      * @return string
      */

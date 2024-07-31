@@ -10,24 +10,16 @@
  *
  * @package    Plugins/ExcelMatrixResults
  */
-class emrSingleChoiceAnswerOptionList implements emrAnswerOptionList, Iterator
+class emrSingleChoiceAnswerOptionList extends emrAnswerOptionListAbstract implements emrAnswerOptionList, Iterator
 {
     use emrAnswerOptionListIterator;
     
     /**
      * @var assSingleChoice
      */
-    protected $questionOBJ;
+    protected assQuestion $questionOBJ;
     
-    /**
-     * emrSingleChoiceAnswerOptionList constructor.
-     * @param assQuestion $questionOBJ
-     */
-    public function __construct(assQuestion $questionOBJ)
-    {
-        $this->questionOBJ = $questionOBJ;
-    }
-    
+
     /**
      * @param integer[] $activeIds
      * @param emrScoredPassLookup $scoredPassLoopup

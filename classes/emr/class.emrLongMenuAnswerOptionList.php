@@ -10,31 +10,21 @@
  *
  * @package    Plugins/ExcelMatrixResults
  */
-class emrLongMenuAnswerOptionList implements emrAnswerOptionList, Iterator
+class emrLongMenuAnswerOptionList extends emrAnswerOptionListAbstract implements emrAnswerOptionList, Iterator
 {
     use emrAnswerOptionListIterator;
     
     /**
      * @var assLongMenu
      */
-    protected $questionOBJ;
+    protected assQuestion $questionOBJ;
     
     /**
      * @var int
      */
     protected $gapIndex;
     
-    /**
-     * emrSingleChoiceAnswerOptionList constructor.
-     * @param assQuestion $questionOBJ
-     */
-    public function __construct(assQuestion $questionOBJ)
-    {
-        $this->questionOBJ = $questionOBJ;
-        
-        $this->gapIndex = 0;
-    }
-    
+
     /**
      * @return int
      */

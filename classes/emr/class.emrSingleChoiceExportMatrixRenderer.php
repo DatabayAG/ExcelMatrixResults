@@ -19,16 +19,7 @@ class emrSingleChoiceExportMatrixRenderer extends emrExportMatrixRendererAbstrac
      * @var assSingleChoice
      */
     protected $questionOBJ;
-    
-    /**
-     * emrSingleChoiceExportMatrixRenderer constructor.
-     * @param assQuestion $questionOBJ
-     */
-    public function __construct(assQuestion $questionOBJ)
-    {
-        $this->questionOBJ = $questionOBJ;
-    }
-    
+
     /**
      * @return string
      */

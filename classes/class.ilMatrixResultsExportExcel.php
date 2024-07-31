@@ -25,7 +25,7 @@ class ilMatrixResultsExportExcel extends ilAssExcelFormatHelper
      *
      * @param string $a_file full path
      */
-    public function writeToFile($a_file)
+    public function writeToFile(string $a_file): void
     {
         $a_file = $this->prepareStorage($a_file);
         
@@ -37,7 +37,7 @@ class ilMatrixResultsExportExcel extends ilAssExcelFormatHelper
     /**
      * NOT set all column autosize
      */
-    public function setGlobalAutoSize()
+    public function setGlobalAutoSize(): void
     {
         // do nothing - let us decide for column widths our self
     }

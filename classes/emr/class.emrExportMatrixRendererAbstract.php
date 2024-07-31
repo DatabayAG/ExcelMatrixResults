@@ -10,6 +10,9 @@
  */
 abstract class emrExportMatrixRendererAbstract implements emrExcelRangeRenderer
 {
+    /** @var assQuestion */
+    protected $questionOBJ;
+
     /**
      * @var ilTestParticipantData
      */
@@ -35,11 +38,11 @@ abstract class emrExportMatrixRendererAbstract implements emrExcelRangeRenderer
      */
     protected $qstPointsRowCollector;
 
-    /**
-     * emrExportMatrixRenderer constructor.
-     * @param assQuestion $questionOBJ
-     */
-    abstract public function __construct(assQuestion $questionOBJ);
+
+    public function __construct(assQuestion $questionOBJ)
+    {
+        $this->questionOBJ = $questionOBJ;
+    }
     
     /**
      * @return emrTotalQuestionPointsRowCollector

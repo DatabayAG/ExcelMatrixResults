@@ -21,7 +21,7 @@ class ilExcelMatrixResultsPlugin extends ilTestExportPlugin
      *
      * @return string Plugin Name
      */
-    public function getPluginName()
+    public function getPluginName(): string
     {
         return 'ExcelMatrixResults';
     }
@@ -30,7 +30,7 @@ class ilExcelMatrixResultsPlugin extends ilTestExportPlugin
      *
      * @return string
      */
-    protected function getFormatIdentifier()
+    protected function getFormatIdentifier(): string
     {
         return 'emr';
     }
@@ -39,51 +39,25 @@ class ilExcelMatrixResultsPlugin extends ilTestExportPlugin
      *
      * @return string
      */
-    public function getFormatLabel()
+    public function getFormatLabel(): string
     {
         return $this->txt('excel_matrix_results_label');
     }
-    
-    protected function includeClasses()
-    {
-        require_once 'Modules/TestQuestionPool/classes/class.ilAssExcelFormatHelper.php';
-        $this->includeClass('class.ilMatrixResultsExportExcel.php');
-        
-        $this->includeClass('class.ilExcelMatrixResultsExportBuilder.php');
-        
-        $this->includeClass('emr/class.emrScoredPassLookup.php');
-        $this->includeClass('emr/class.emrTotalQuestionPointsRowCollector.php');
-        
-        $this->includeClass('emr/interface.emrAnswerOptionList.php');
-        $this->includeClass('emr/trait.emrAnswerOptionListIterator.php');
-        $this->includeClass('emr/class.emrSingleChoiceAnswerOptionList.php');
-        $this->includeClass('emr/class.emrLongMenuAnswerOptionList.php');
-        $this->includeClass('emr/class.emrTextQuestionAnswerOptionList.php');
 
-        $this->includeClass('emr/class.emrAnswerOption.php');
-        
-        $this->includeClass('emr/interface.emrExcelRangeRenderer.php');
-        $this->includeClass('emr/class.emrExportHeaderRenderer.php');
-        $this->includeClass('emr/class.emrExportSummaryRenderer.php');
-        $this->includeClass('emr/class.emrQuestionGroupHeaderRenderer.php');
-        $this->includeClass('emr/class.emrExportMatrixRendererAbstract.php');
-        $this->includeClass('emr/class.emrSingleChoiceExportMatrixRenderer.php');
-        $this->includeClass('emr/class.emrLongMenuExportMatrixRenderer.php');
-        $this->includeClass('emr/class.emrTextQuestionExportMatrixRenderer.php');
-    }
-    
     /**
      *
      * @param ilTestExportFilename $filename
      */
     protected function buildExportFile(ilTestExportFilename $filename)
     {
-        if (!$this->getTest()->isFixedTest()) {
-            ilUtil::sendFailure($this->txt('failure_msg_only_fixed_tests'));
-            return;
-        }
+        global $DIC;
+        $tpl = $DIC->ui()->mainTemplate();
 
-        $this->includeClasses();
+        if (!$this->getTest()->isFixedTest()) {
+            $tpl->setOnScreenMessage(ilGlobalTemplateInterface::MESSAGE_TYPE_FAILURE,
+                $this->txt('failure_msg_only_fixed_tests'), true);
+            return '';
+        }
         
         $exportBuilder = new ilExcelMatrixResultsExportBuilder($this->getTest());
         $exportBuilder->setPlugin($this);
