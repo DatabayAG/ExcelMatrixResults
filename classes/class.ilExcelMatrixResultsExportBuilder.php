@@ -61,35 +61,28 @@ class ilExcelMatrixResultsExportBuilder extends ilTestExport
     protected function getQuestionsQtiXml()
     {
     }
-    
-    public function ensureExistingExportDirectory()
+    public function buildExportFile(): string
     {
-        $absolute_path = $this->test_obj->getExportDirectory();
-        $relative_path = LegacyPathHelper::createRelativePath($absolute_path);
-        $filesystem = LegacyPathHelper::deriveFilesystemFrom($absolute_path);
-        if (!$filesystem->hasDir($relative_path)) {
-            $filesystem->createDir($relative_path);
-        }
+        return "";
     }
-    
-    protected function getFixedFilename()
-    {
-        return str_replace($this->getExtension(), "xlsx", $this->filename);
-    }
-    
+
     /**
      * MAIN EXPORT FUNCTION
      *
      * @return string $exportFilename
      */
-    public function buildExportFile(): string
+    public function buildExcelMatrixFile(ilTestExportFilename $export_path)
     {
         $excel = new ilMatrixResultsExportExcel();
         $this->addTestPassMatrixWorkSheet($excel);
-        
-        $filename = $this->test_obj->getExportDirectory() . "/" . $this->getFixedFilename();
-        $excel->writeToFile($filename);
-        return $filename;
+
+        $absolute_path = $export_path->getPathname('xlsx', 'results');
+        $relative_path = LegacyPathHelper::createRelativePath($absolute_path);
+        $filesystem = LegacyPathHelper::deriveFilesystemFrom($absolute_path);
+        if (!$filesystem->hasDir(dirname($relative_path))) {
+            $filesystem->createDir(dirname($relative_path));
+        }
+        $excel->writeToFile($absolute_path);
     }
     
     protected function addTestPassMatrixWorkSheet(ilMatrixResultsExportExcel $excel)

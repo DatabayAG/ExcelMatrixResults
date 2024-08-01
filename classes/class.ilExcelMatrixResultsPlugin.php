@@ -61,8 +61,6 @@ class ilExcelMatrixResultsPlugin extends ilTestExportPlugin
         
         $exportBuilder = new ilExcelMatrixResultsExportBuilder($this->getTest());
         $exportBuilder->setPlugin($this);
-        $exportBuilder->ensureExistingExportDirectory();
-        
-        return $exportBuilder->buildExportFile();
+        $exportBuilder->buildExcelMatrixFile($filename);
     }
 }
