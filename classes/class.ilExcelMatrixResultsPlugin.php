@@ -13,20 +13,6 @@ require_once 'Modules/Test/classes/class.ilTestExportPlugin.php';
 class ilExcelMatrixResultsPlugin extends ilTestExportPlugin
 {
     /**
-     * Get Plugin Name.
-     * Must be same as in class name il<Name>Plugin
-     * and must correspond to plugins subdirectory name.
-     * Must be overwritten in plugin class of plugin
-     * (and should be made final)
-     *
-     * @return string Plugin Name
-     */
-    public function getPluginName(): string
-    {
-        return 'ExcelMatrixResults';
-    }
-    
-    /**
      *
      * @return string
      */

@@ -41,15 +41,7 @@ class emrAnswerOption
     {
         $this->answeringActiveIds[$activeId] = $activeId;
     }
-    
-    /**
-     * @return int
-     */
-    public function getAnsweringFrequency()
-    {
-        return count($this->answeringActiveIds[$activeId]);
-    }
-    
+
     /**
      * @return string
      */
