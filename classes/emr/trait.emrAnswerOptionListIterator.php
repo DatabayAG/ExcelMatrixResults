@@ -37,7 +37,7 @@ trait emrAnswerOptionListIterator
     /**
      * @return emrAnswerOption
      */
-    public function current()
+    public function current(): mixed
     {
         return current($this->answerOptions);
     }
@@ -45,15 +45,15 @@ trait emrAnswerOptionListIterator
     /**
      * @return emrAnswerOption
      */
-    public function next()
+    public function next() : void
     {
-        return next($this->answerOptions);
+        next($this->answerOptions);
     }
     
     /**
      * @return integer
      */
-    public function key()
+    public function key() : mixed
     {
         return key($this->answerOptions);
     }
@@ -61,7 +61,7 @@ trait emrAnswerOptionListIterator
     /**
      * @return bool
      */
-    public function valid()
+    public function valid() :bool
     {
         return key($this->answerOptions) !== null;
     }
@@ -69,9 +69,9 @@ trait emrAnswerOptionListIterator
     /**
      * @return emrAnswerOption
      */
-    public function rewind()
+    public function rewind() : void
     {
-        return reset($this->answerOptions);
+        reset($this->answerOptions);
     }
     
     /**

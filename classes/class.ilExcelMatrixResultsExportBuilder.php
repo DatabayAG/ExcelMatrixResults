@@ -147,7 +147,7 @@ class ilExcelMatrixResultsExportBuilder extends ilTestExport
         $questions = array();
         
         foreach ($this->test_obj->getTestQuestions() as $q) {
-            $question = assQuestion::_instantiateQuestion($q['question_id']);
+            $question = assQuestion::instantiateQuestion($q['question_id']);
             
             if (!$this->isSupportedQuestionType($question->getQuestionType())) {
                 continue;

@@ -30,11 +30,7 @@ class ilExcelMatrixResultsPlugin extends ilTestExportPlugin
         return $this->txt('excel_matrix_results_label');
     }
 
-    /**
-     *
-     * @param ilTestExportFilename $filename
-     */
-    protected function buildExportFile(ilTestExportFilename $filename)
+    protected function buildExportFile(ilTestExportFilename $export_path): void
     {
         global $DIC;
         $tpl = $DIC->ui()->mainTemplate();
@@ -42,11 +38,11 @@ class ilExcelMatrixResultsPlugin extends ilTestExportPlugin
         if (!$this->getTest()->isFixedTest()) {
             $tpl->setOnScreenMessage(ilGlobalTemplateInterface::MESSAGE_TYPE_FAILURE,
                 $this->txt('failure_msg_only_fixed_tests'), true);
-            return '';
+            return;
         }
         
         $exportBuilder = new ilExcelMatrixResultsExportBuilder($this->getTest());
         $exportBuilder->setPlugin($this);
-        $exportBuilder->buildExcelMatrixFile($filename);
+        $exportBuilder->buildExcelMatrixFile($export_path);
     }
 }
