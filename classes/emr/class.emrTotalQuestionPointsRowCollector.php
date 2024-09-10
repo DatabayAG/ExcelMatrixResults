@@ -10,19 +10,25 @@
  */
 class emrTotalQuestionPointsRowCollector
 {
-    protected $totalQuestionPointsRows = array();
-    
-    public function addTotalQuestionPointsRow($totalQuestionPointsRow)
+    /**
+     * @var int[]
+     */
+    protected $totalQuestionPointsRows = [];
+
+    public function addTotalQuestionPointsRow(int $totalQuestionPointsRow): void
     {
         $this->totalQuestionPointsRows[] = $totalQuestionPointsRow;
     }
-    
-    public function getTotalQuestionPointsRows()
+
+    /**
+     * @return int[]
+     */
+    public function getTotalQuestionPointsRows(): array
     {
         return $this->totalQuestionPointsRows;
     }
-    
-    public function getNumQuestions()
+
+    public function getNumQuestions(): int
     {
         return count($this->totalQuestionPointsRows);
     }

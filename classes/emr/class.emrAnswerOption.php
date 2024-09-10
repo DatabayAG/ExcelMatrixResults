@@ -1,4 +1,5 @@
 <?php
+
 /* Copyright (c) 1998-2013 ILIAS open source, Extended GPL, see docs/LICENSE */
 
 /**
@@ -10,74 +11,43 @@
 class emrAnswerOption
 {
     /**
-     * @var array
+     * @var int[]
      */
-    protected $answeringActiveIds = array();
-    
-    /**
-     * @var string
-     */
-    protected $title = '';
+    protected array $answeringActiveIds = [];
+    protected string $title = '';
+    protected float $points = 0;
 
-    /**
-     * @var float
-     */
-    protected $points = 0;
-    
-    
-    /**
-     * @param integer $activeId
-     * @return bool
-     */
-    public function hasActiveIdAnswered($activeId)
+    public function hasActiveIdAnswered(int $activeId): bool
     {
         return isset($this->answeringActiveIds[$activeId]);
     }
-    
-    /**
-     * @param integer $activeId
-     */
-    public function addAnsweringActiveId($activeId)
+
+    public function addAnsweringActiveId(int $activeId): void
     {
         $this->answeringActiveIds[$activeId] = $activeId;
     }
 
-    /**
-     * @return string
-     */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
-    
-    /**
-     * @param string $title
-     */
-    public function setTitle($title)
+
+    public function setTitle(string $title): void
     {
         $this->title = $title;
     }
-    
-    /**
-     * @return float
-     */
-    public function getPoints()
+
+    public function getPoints(): float
     {
         return $this->points;
     }
-    
-    /**
-     * @param float $points
-     */
-    public function setPoints($points)
+
+    public function setPoints(float $points)
     {
         $this->points = $points;
     }
-    
-    /**
-     * @return bool
-     */
-    public function hasPoints()
+
+    public function hasPoints(): bool
     {
         return $this->getPoints() > 0;
     }

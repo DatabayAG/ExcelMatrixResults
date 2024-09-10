@@ -12,33 +12,21 @@
  */
 class emrQuestionGroupHeaderRenderer implements emrExcelRangeRenderer
 {
-    /**
-     * @var string
-     */
-    protected $questionGroupTitle;
-    
-    /**
-     * emrQuestionGroupHeaderRenderer constructor.
-     * @param $questionGroupTitle
-     */
-    public function __construct($questionGroupTitle)
+    protected string $questionGroupTitle;
+
+    public function __construct(string $questionGroupTitle)
     {
         $this->questionGroupTitle = $questionGroupTitle;
     }
-    
-    /**
-     * @param ilMatrixResultsExportExcel $excel
-     * @param int $firstRow
-     * @return int $lastRow
-     */
-    public function render(ilMatrixResultsExportExcel $excel, $firstRow)
+
+    public function render(ilMatrixResultsExportExcel $excel, int $firstRow): int
     {
         $cellChords = $excel->getCoordByColumnAndRow(0, $firstRow);
-        
+
         $excel->setCellByCoordinates($cellChords, $this->questionGroupTitle);
         $excel->setBold($cellChords);
         //$excel->setBorderRight($cellChords, true);
-        
+
         return $firstRow;
     }
 }
