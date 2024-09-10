@@ -24,9 +24,6 @@ class ilExcelMatrixResultsPlugin extends ilTestExportPlugin
 
     protected function buildExportFile(ilTestExportFilename $export_path): void
     {
-        global $DIC;
-        $tpl = $DIC->ui()->mainTemplate();
-
         if (!$this->getTest()->isFixedTest()) {
             throw new ilException($this->txt('failure_msg_only_fixed_tests'));
         }
