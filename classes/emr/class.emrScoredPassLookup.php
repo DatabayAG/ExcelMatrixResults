@@ -11,29 +11,21 @@
 class emrScoredPassLookup
 {
     /**
-     * @var array
+     * @var array<int, int|null>
      */
-    protected $scoredPassByActiveId = array();
-    
-    /**
-     * @param int $activeId
-     * @return int
-     */
-    protected function load($activeId)
+    protected array $scoredPassByActiveId = [];
+
+    protected function load(int $activeId): ?int
     {
         return ilObjTest::_getResultPass($activeId);
     }
-    
-    /**
-     * @param int $activeId
-     * @return int
-     */
-    public function get($activeId)
+
+    public function get(int $activeId): ?int
     {
-        if (!isset($this->scoredPassByActiveId[$activeId])) {
+        if (!array_key_exists($activeId, $this->scoredPassByActiveId)) {
             $this->scoredPassByActiveId[$activeId] = $this->load($activeId);
         }
-        
+
         return $this->scoredPassByActiveId[$activeId];
     }
 }

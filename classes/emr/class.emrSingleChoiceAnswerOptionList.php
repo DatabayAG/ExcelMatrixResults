@@ -10,76 +10,67 @@
  *
  * @package    Plugins/ExcelMatrixResults
  */
-class emrSingleChoiceAnswerOptionList implements emrAnswerOptionList, Iterator
+class emrSingleChoiceAnswerOptionList extends emrAnswerOptionListAbstract implements emrAnswerOptionList, Iterator
 {
     use emrAnswerOptionListIterator;
-    
+
     /**
      * @var assSingleChoice
      */
-    protected $questionOBJ;
-    
-    /**
-     * emrSingleChoiceAnswerOptionList constructor.
-     * @param assQuestion $questionOBJ
-     */
-    public function __construct(assQuestion $questionOBJ)
-    {
-        $this->questionOBJ = $questionOBJ;
-    }
-    
+    protected assQuestion $questionOBJ;
+
+
     /**
      * @param integer[] $activeIds
-     * @param emrScoredPassLookup $scoredPassLoopup
      */
-    public function initialise($activeIds, emrScoredPassLookup $scoredPassLoopup)
+    public function initialise(array $activeIds, emrScoredPassLookup $scoredPassLoopup): void
     {
         $this->initAnswerOptions();
-        
+
         foreach ($activeIds as $activeId) {
             $pass = $scoredPassLoopup->get($activeId);
             $rows = $this->questionOBJ->getSolutionValues($activeId, $pass);
-            
+
             if (!count($rows)) {
                 continue;
             }
-            
-            if ($this->answerOptionExists($rows[0]['value1'])) {
-                $answerOption = $this->getAnswerOption($rows[0]['value1']);
-                $answerOption->addAnsweringActiveId($activeId);
+
+            if ($this->answerOptionExists((string) $rows[0]['value1'])) {
+                $answerOption = $this->getAnswerOption((string) $rows[0]['value1']);
+                $answerOption->addAnsweringActiveId((int) $activeId);
             }
         }
     }
-    
+
     protected function initAnswerOptions()
     {
         $bestAnswerIndex = $this->getBestAnswerIndex();
-        
+
         foreach ($this->questionOBJ->getAnswers() as $index => $answer) {
             $answerOption = new emrAnswerOption();
-            
+
             $answerOption->setTitle(
-                $index == $bestAnswerIndex ? $answer->getAnswertext() : '# ' . $answer->getAnswertext()
+                $index == $bestAnswerIndex ? (string) $answer->getAnswertext() : '# ' . $answer->getAnswertext()
             );
-            
-            $answerOption->setPoints($answer->getPoints());
-            
-            $this->addAnswerOption($answerOption, $index);
+
+            $answerOption->setPoints((float) $answer->getPoints());
+
+            $this->addAnswerOption($answerOption, (string) $index);
         }
     }
-    
-    protected function getBestAnswerIndex()
+
+    protected function getBestAnswerIndex(): ?int
     {
         $maxPoints = 0;
         $bestIndex = null;
-        
+
         foreach ($this->questionOBJ->getAnswers() as $index => $answer) {
             if ($bestIndex === null || $answer->getPoints() > $maxPoints) {
                 $maxPoints = $answer->getPoints();
                 $bestIndex = $index;
             }
         }
-    
+
         return $bestIndex;
     }
 }

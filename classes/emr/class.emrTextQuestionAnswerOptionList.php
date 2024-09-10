@@ -10,43 +10,33 @@
  *
  * @package    Plugins/ExcelMatrixResults
  */
-class emrTextQuestionAnswerOptionList implements emrAnswerOptionList, Iterator
+class emrTextQuestionAnswerOptionList extends emrAnswerOptionListAbstract implements emrAnswerOptionList, Iterator
 {
     use emrAnswerOptionListIterator;
-    
+
     /**
      * @var assTextQuestion
      */
-    protected $questionOBJ;
-    
-    /**
-     * emrSingleChoiceAnswerOptionList constructor.
-     * @param assQuestion $questionOBJ
-     */
-    public function __construct(assQuestion $questionOBJ)
-    {
-        $this->questionOBJ = $questionOBJ;
-    }
-    
+    protected assQuestion $questionOBJ;
+
     /**
      * @param integer[] $activeIds
-     * @param emrScoredPassLookup $scoredPassLoopup
      */
-    public function initialise($activeIds, emrScoredPassLookup $scoredPassLoopup)
+    public function initialise(array $activeIds, emrScoredPassLookup $scoredPassLoopup): void
     {
         foreach ($activeIds as $activeId) {
             $pass = $scoredPassLoopup->get($activeId);
             $rows = $this->questionOBJ->getSolutionValues($activeId, $pass);
-            
+
             $answerOption = new emrAnswerOption();
-            
+
             if (count($rows)) {
-                $answerOption->setTitle($rows[0]['value1']);
+                $answerOption->setTitle($this->refinery->string()->stripTags()->transform((string) $rows[0]['value1']));
             }
-            
-            $answerOption->addAnsweringActiveId($activeId);
-            
-            $this->addAnswerOption($answerOption, $activeId);
+
+            $answerOption->addAnsweringActiveId((int) $activeId);
+
+            $this->addAnswerOption($answerOption, (string) $activeId);
         }
     }
 }

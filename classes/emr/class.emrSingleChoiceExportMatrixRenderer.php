@@ -13,57 +13,38 @@ class emrSingleChoiceExportMatrixRenderer extends emrExportMatrixRendererAbstrac
     /**
      * @var emrSingleChoiceAnswerOptionList
      */
-    protected $answerOptionList;
+    protected emrAnswerOptionList $answerOptionList;
 
-    /**
-     * @var assSingleChoice
-     */
-    protected $questionOBJ;
-    
-    /**
-     * emrSingleChoiceExportMatrixRenderer constructor.
-     * @param assQuestion $questionOBJ
-     */
-    public function __construct(assQuestion $questionOBJ)
-    {
-        $this->questionOBJ = $questionOBJ;
-    }
-    
-    /**
-     * @return string
-     */
-    protected function getQuestionTypeLabel()
+    protected assQuestion $questionOBJ;
+
+
+    protected function getQuestionTypeLabel(): string
     {
         return $this->getPlugin()->txt('qst_type_label_singlechoice');
     }
-    
-    /**
-     * @param ilMatrixResultsExportExcel $excel
-     * @param int $firstRow
-     * @return int $lastRow
-     */
-    public function render(ilMatrixResultsExportExcel $excel, $firstRow)
+
+    public function render(ilMatrixResultsExportExcel $excel, int $firstRow): int
     {
         $row = $firstRow;
-        
+
         $this->renderFrontBorder($excel, $row);
-        
+
         $this->renderQuestionTitle($excel, $row, $this->questionOBJ->getTitle());
 
         $this->renderQuestionType($excel, ++$row);
         $this->renderQuestionHeader($excel, $row);
-        
+
         $this->renderAnswerOptionLabels($excel, ++$row);
         $this->renderAnswerOptionPoints($excel, $row);
         $this->renderAnswerOptionFrequencyFormula($excel, $row);
         $this->renderParticipantsAnswerings($excel, $row);
-        
+
         $this->renderTotalPoints($excel, $row, $this->answerOptionList);
-        
+
         $this->qstPointsRowCollector->addTotalQuestionPointsRow(
             $row + $this->answerOptionList->getNumAnswers()
         );
-        
+
         return $firstRow + $this->getAnswerOptionList()->getNumAnswers() + 3;
     }
 }
