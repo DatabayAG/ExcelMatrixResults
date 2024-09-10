@@ -16,10 +16,10 @@ class ilMatrixResultsExportExcel extends ilAssExcelFormatHelper
     /**
      * colors
      */
-    const COLOR_GREY = 'C0C0C0';
-    const COLOR_LIGHT_BLUE = 'ccffff';
-    const COLOR_LIGHT_YELLOW = 'ffff99';
-    
+    public const COLOR_GREY = 'C0C0C0';
+    public const COLOR_LIGHT_BLUE = 'ccffff';
+    public const COLOR_LIGHT_YELLOW = 'ffff99';
+
     /**
      * Save workbook to file
      *
@@ -28,12 +28,12 @@ class ilMatrixResultsExportExcel extends ilAssExcelFormatHelper
     public function writeToFile(string $a_file): void
     {
         $a_file = $this->prepareStorage($a_file);
-        
+
         $writer = IOFactory::createWriter($this->workbook, self::FORMAT_XML);
         $writer->setPreCalculateFormulas(true);
         $writer->save($a_file);
     }
-    
+
     /**
      * NOT set all column autosize
      */
@@ -41,133 +41,103 @@ class ilMatrixResultsExportExcel extends ilAssExcelFormatHelper
     {
         // do nothing - let us decide for column widths our self
     }
-    
-    /**
-     * @param string $coord
-     */
-    public function setFirstNonFreezedCell($coord)
+
+
+    public function setFirstNonFreezedCell(string $coord): void
     {
         $this->workbook->getActiveSheet()->freezePane($coord);
     }
-    
-    /**
-     * @param int $col
-     * @param float $width
-     */
-    public function setColumnWidth($col, $width)
+
+    public function setColumnWidth(int $col, float $width): void
     {
         $col = $this->getColumnCoord($col);
         $this->workbook->getActiveSheet()->getColumnDimension($col)->setAutoSize(false);
         $this->workbook->getActiveSheet()->getColumnDimension($col)->setWidth($width);
     }
-    
-    public function setAlignTop($coords)
+
+    public function setAlignTop(string $coords): void
     {
         $this->workbook->getActiveSheet()->getStyle($coords)->getAlignment()->setVertical(
             Style\Alignment::VERTICAL_TOP
         );
     }
-    
-    public function setAlignRight($coords)
+
+    public function setAlignRight(string $coords): void
     {
         $this->workbook->getActiveSheet()->getStyle($coords)->getAlignment()->setHorizontal(
             Style\Alignment::HORIZONTAL_RIGHT
         );
     }
-    
-    /**
-     * @param float $width
-     */
-    public function setDefaultColumnWidth($width)
+
+    public function setDefaultColumnWidth(float $width): void
     {
         $this->workbook->getActiveSheet()->getDefaultColumnDimension()->setWidth($width);
     }
-    
-    /**
-     * @param int $seconds
-     * @return string
-     */
-    public function formatMinutes($seconds)
+
+    public function formatMinutes(int $seconds): string
     {
         $mins = (int) ($seconds / 60);
         $secs = (int) ($seconds % 60);
         return sprintf("%02d:%02d", $mins, $secs);
     }
 
-    /**
-     * @param string $rangeCoords
-     * @param bool $bold
-     */
-    public function setBorderTop($rangeCoords, $bold = false)
+    public function setBorderTop(string $rangeCoords, bool $bold = false): void
     {
         $style = $this->workbook->getActiveSheet()->getStyle($rangeCoords);
-        
+
         $style->getBorders()->getTop()->setBorderStyle(
             $bold ? Style\Border::BORDER_THICK : Style\Border::BORDER_THIN
         );
     }
-    
-    /**
-     * @param string $rangeCoords
-     * @param bool $bold
-     */
-    public function setBorderRight($rangeCoords, $bold = false)
+
+    public function setBorderRight(string $rangeCoords, bool $bold = false): void
     {
         $style = $this->workbook->getActiveSheet()->getStyle($rangeCoords);
-        
+
         $style->getBorders()->getRight()->setBorderStyle(
             $bold ? Style\Border::BORDER_THICK : Style\Border::BORDER_THIN
         );
     }
-    
+
     /**
      * @param string $rangeCoords
      * @param bool $bold
      */
-    public function setBorderBottom($rangeCoords, $bold = false)
+    public function setBorderBottom(string $rangeCoords, bool $bold = false): void
     {
         $style = $this->workbook->getActiveSheet()->getStyle($rangeCoords);
-        
+
         $style->getBorders()->getBottom()->setBorderStyle(
             $bold ? Style\Border::BORDER_THICK : Style\Border::BORDER_THIN
         );
     }
-    
-    /**
-     * @param string $rangeCoords
-     * @param bool $bold
-     */
-    public function setBorderLeft($rangeCoords, $bold = false)
+
+    public function setBorderLeft(string $rangeCoords, bool $bold = false): void
     {
         $style = $this->workbook->getActiveSheet()->getStyle($rangeCoords);
-        
+
         $style->getBorders()->getLeft()->setBorderStyle(
             $bold ? Style\Border::BORDER_THICK : Style\Border::BORDER_THIN
         );
     }
-    
-    /**
-     * @param string $coords
-     * @param string $formula
-     */
-    public function setFormulaByCoordinates($coords, $formula)
+
+    public function setFormulaByCoordinates(string $coords, string $formula): void
     {
         $this->workbook->getActiveSheet()->setCellValue($coords, $formula);
         $this->workbook->getActiveSheet()->getCell($coords)->getOldCalculatedValue();
-        
+
         $this->workbook->getActiveSheet()->getStyle($coords)->getAlignment()->setHorizontal(
             Style\Alignment::HORIZONTAL_RIGHT
         );
     }
-    
+
     /**
-     * @param string $coords
-     * @param string $number
+     * @param int|string $number
      */
-    public function setNumberByCoordinates($coords, $number)
+    public function setNumberByCoordinates(string $coords, $number): void
     {
         $this->workbook->getActiveSheet()->setCellValue($coords, $number);
-        
+
         $this->workbook->getActiveSheet()->getStyle($coords)->getAlignment()->setHorizontal(
             Style\Alignment::HORIZONTAL_RIGHT
         );

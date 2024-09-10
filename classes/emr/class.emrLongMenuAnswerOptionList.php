@@ -13,85 +13,74 @@
 class emrLongMenuAnswerOptionList extends emrAnswerOptionListAbstract implements emrAnswerOptionList, Iterator
 {
     use emrAnswerOptionListIterator;
-    
+
     /**
      * @var assLongMenu
      */
     protected assQuestion $questionOBJ;
-    
-    /**
-     * @var int
-     */
-    protected $gapIndex;
-    
 
-    /**
-     * @return int
-     */
-    public function getGapIndex()
+    protected int $gapIndex;
+
+    public function getGapIndex(): int
     {
         return $this->gapIndex;
     }
-    
-    /**
-     * @param int $gapIndex
-     */
-    public function setGapIndex($gapIndex)
+
+    public function setGapIndex(int $gapIndex)
     {
         $this->gapIndex = $gapIndex;
     }
-    
+
     /**
-     * @param integer[] $activeIds
-     * @param emrScoredPassLookup $scoredPassLoopup
+     * @param int[] $activeIds
      */
-    public function initialise($activeIds, emrScoredPassLookup $scoredPassLoopup)
+    public function initialise(array $activeIds, emrScoredPassLookup $scoredPassLoopup): void
     {
         $this->initCorrectAnswers();
         //$this->initWrongAnswers();
-        
+
         foreach ($activeIds as $activeId) {
             $pass = $scoredPassLoopup->get($activeId);
             $rows = $this->questionOBJ->getSolutionValues($activeId, $pass);
-            
+
             foreach ($rows as $row) {
                 if ($row['value1'] != $this->getGapIndex()) {
                     continue;
                 }
-                
-                if ($this->answerOptionExists($row['value2'])) {
-                    $answerOption = $this->getAnswerOption($row['value2']);
-                    $answerOption->addAnsweringActiveId($activeId);
+
+                if ($this->answerOptionExists((string) $row['value2'])) {
+                    $answerOption = $this->getAnswerOption((string) $row['value2']);
+                    $answerOption->addAnsweringActiveId((int) $activeId);
                 } else {
                     $answerOption = new emrAnswerOption();
                     $answerOption->setTitle('# ' . $row['value2']);
                     $answerOption->setPoints(0);
-                    
-                    $answerOption->addAnsweringActiveId($activeId);
-                    
-                    $this->addAnswerOption($answerOption, $row['value2']);
+
+                    $answerOption->addAnsweringActiveId((int) $activeId);
+
+                    $this->addAnswerOption($answerOption, (string) $row['value2']);
                 }
             }
         }
     }
-    
+
     public function initCorrectAnswers()
     {
         foreach ($this->questionOBJ->getCorrectAnswers() as $gapIndex => $gapData) {
             if ($gapIndex != $this->getGapIndex()) {
                 continue;
             }
-            
+
             foreach ($gapData[0] as $answertext) {
                 $answerOption = new emrAnswerOption();
-                $answerOption->setTitle($answertext);
-                $answerOption->setPoints($gapData[1]);
-                
-                $this->addAnswerOption($answerOption, $answertext);
+                $answerOption->setTitle((string) $answertext);
+                $answerOption->setPoints((float) $gapData[1]);
+
+                $this->addAnswerOption($answerOption, (string) $answertext);
             }
         }
     }
-    
+
     protected function initWrongAnswers()
     {
         foreach ($this->questionOBJ->getAnswers() as $gapIndex => $gapAnswers) {
@@ -103,11 +92,11 @@ class emrLongMenuAnswerOptionList extends emrAnswerOptionListAbstract implements
                 if ($this->answerOptionExists($answer)) {
                     continue;
                 }
-                
+
                 $answerOption = new emrAnswerOption();
                 $answerOption->setTitle('# ' . $answer);
                 $answerOption->setPoints(0);
-                
+
                 $this->addAnswerOption($answerOption, $answer);
             }
         }
