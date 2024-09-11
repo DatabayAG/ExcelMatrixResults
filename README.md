@@ -27,6 +27,8 @@ in this document are to be interpreted as described in
 mkdir -p Customizing/global/plugins/Modules/Test/Export
 cd Customizing/global/plugins/Modules/Test/Export
 git clone https://github.com/DatabayAG/ExcelMatrixResults.git
+cd ../../../../../..
+composer du
 ```
 
 ... from zip file:
@@ -37,7 +39,14 @@ wget https://github.com/DatabayAG/archive/master.zip
 unzip master.zip
 rm -f master.zip
 mv ExcelMatrixResults-master ExcelMatrixResults
+cd ../../../../../..
+composer du
 ```
+
+Then 
+* Log in to ILIAS as administrator
+* Open **Administration > Extending ILIAS > Plugins**
+* Install and activate the ExcelMatrixResults plugin
 
 ## Other information
 
