@@ -11,7 +11,7 @@ use PhpOffice\PhpSpreadsheet\Style;
  *
  * @package    Plugins/ExcelMatrixResults
  */
-class ilMatrixResultsExportExcel extends ilAssExcelFormatHelper
+class ilMatrixResultsExportExcel extends ilExcel
 {
     /**
      * colors
@@ -37,7 +37,7 @@ class ilMatrixResultsExportExcel extends ilAssExcelFormatHelper
     /**
      * NOT set all column autosize
      */
-    public function setGlobalAutoSize(): void
+    protected function setGlobalAutoSize(): void
     {
         // do nothing - let us decide for column widths our self
     }

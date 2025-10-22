@@ -2,6 +2,8 @@
 
 /* Copyright (c) 1998-2013 ILIAS open source, Extended GPL, see docs/LICENSE */
 
+use ILIAS\Test\ExportImport\ExportFilename;
+
 /**
  * Class ilExcelMatrixResultsPlugin
  *
@@ -22,7 +24,7 @@ class ilExcelMatrixResultsPlugin extends ilTestExportPlugin
         return $this->txt('excel_matrix_results_label');
     }
 
-    protected function buildExportFile(ilTestExportFilename $export_path): void
+    protected function buildExportFile(ExportFilename $export_path): void
     {
         if (!$this->getTest()->isFixedTest()) {
             throw new ilException($this->txt('failure_msg_only_fixed_tests'));

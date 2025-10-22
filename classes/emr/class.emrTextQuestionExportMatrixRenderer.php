@@ -35,6 +35,7 @@ class emrTextQuestionExportMatrixRenderer extends emrExportMatrixRendererAbstrac
 
         $this->renderAnswerOptionLabels($excel, ++$row);
         $this->renderAnswerOptionPoints($excel, $row);
+        $this->renderAnswerOptionFrequencyFormula($excel, $row);
         $this->renderParticipantsAnswerings($excel, $row);
 
         $this->renderAnswerPoints($excel, ++$row, $row - 1, 3, 4);
@@ -84,20 +85,6 @@ class emrTextQuestionExportMatrixRenderer extends emrExportMatrixRendererAbstrac
         }
     }
 
-    protected function renderQuestionHeader(ilMatrixResultsExportExcel $excel, int $firstRow): void
-    {
-        $startCoord = $excel->getCoordByColumnAndRow(4, $firstRow);
-        $endCoord = $excel->getCoordByColumnAndRow(5, $firstRow);
-        $excel->mergeCells("$startCoord:$endCoord");
-        $excel->setCellByCoordinates($startCoord, $this->getPlugin()->txt('points_header'));
-        $excel->setColors($startCoord, ilMatrixResultsExportExcel::COLOR_LIGHT_BLUE);
-        $excel->setBold($startCoord);
-
-        $excel->setBorders($startCoord, true, false, true, true);
-        $excel->setBorders($endCoord, false, true, false, false);
-
-        $excel->setAlignRight($startCoord);
-    }
 
     protected function renderAnswerOptionLabels(ilMatrixResultsExportExcel $excel, int $firstRow): void
     {
@@ -117,17 +104,24 @@ class emrTextQuestionExportMatrixRenderer extends emrExportMatrixRendererAbstrac
         $row = $firstRow;
         $col = 4;
 
-        $startCoords = $excel->getCoordByColumnAndRow($col, $row);
-        $endCoords = $excel->getCoordByColumnAndRow($col + 1, $row);
+        $coords = $excel->getCoordByColumnAndRow($col, $row);
+        $excel->setCellByCoordinates($coords, $this->questionOBJ->getPoints());
+        $excel->setBold($coords);
+        $excel->setColors($coords, ilMatrixResultsExportExcel::COLOR_LIGHT_BLUE);
+        $excel->setBorders($coords, true, true, true, true);
+    }
 
-        $excel->mergeCells("$startCoords:$endCoords");
 
-        $excel->setCellByCoordinates($startCoords, $this->questionOBJ->getPoints());
-        $excel->setBold($startCoords);
-        $excel->setColors($startCoords, ilMatrixResultsExportExcel::COLOR_LIGHT_BLUE);
+    protected function renderAnswerOptionFrequencyFormula(ilMatrixResultsExportExcel $excel, int $firstRow): void
+    {
+        $row = $firstRow;
+        $col = 5;
 
-        $excel->setBorders($startCoords, true, false, true, true);
-        $excel->setBorders($endCoords, false, true, false, false);
+        $coords = $excel->getCoordByColumnAndRow($col, $row);
+        $excel->setCellByCoordinates($coords, '---');
+        $excel->setBold($coords);
+        $excel->setColors($coords, ilMatrixResultsExportExcel::COLOR_LIGHT_BLUE);
+        $excel->setBorders($coords, true, true, true, true);
     }
 
     protected function renderParticipantsAnswerings(ilMatrixResultsExportExcel $excel, int $firstRow): void
