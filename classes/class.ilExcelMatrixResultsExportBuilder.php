@@ -4,16 +4,15 @@
 
 use ILIAS\Filesystem\Util\LegacyPathHelper;
 use ILIAS\Refinery\Factory as Refinery;
+use ILIAS\Test\ExportImport\ExportFilename;
 
 /**
- * Class class.ilResultsAndProgressExportBuilder
- *
  * @author    Björn Heyser <info@bjoernheyser.de>
  * @version    $Id$
  *
  * @package    Plugins/ExcelMatrixResults
  */
-class ilExcelMatrixResultsExportBuilder extends ilTestExport
+class ilExcelMatrixResultsExportBuilder
 {
     protected $supportedQuestionTypes = array(
         'assSingleChoice', 'assTextQuestion', 'assLongMenu'
@@ -24,11 +23,10 @@ class ilExcelMatrixResultsExportBuilder extends ilTestExport
     protected ilExcelMatrixResultsPlugin $plugin;
     protected Refinery $refinery;
 
-    public function __construct(ilObjTest $testObject)
-    {
+    public function __construct(
+        private readonly ilObjTest $test_obj
+    ) {
         global $DIC;
-
-        parent::__construct($testObject, 'results');
 
         $this->lang = $DIC->language();
         $this->refinery = $DIC->refinery();
@@ -48,28 +46,10 @@ class ilExcelMatrixResultsExportBuilder extends ilTestExport
         $this->plugin = $plugin;
     }
 
-    // never used methods dealing with test object export stuff this class is never used for
-    protected function initXmlExport()
-    {
-    }
-    protected function getQuestionIds()
-    {
-    }
-    protected function populateQuestionSetConfigXml(ilXmlWriter $xmlWriter)
-    {
-    }
-    protected function getQuestionsQtiXml()
-    {
-    }
-    public function buildExportFile(): string
-    {
-        return "";
-    }
-
     /**
      * MAIN EXPORT FUNCTION
      */
-    public function buildExcelMatrixFile(ilTestExportFilename $export_path): void
+    public function buildExcelMatrixFile(ExportFilename $export_path): void
     {
         $excel = new ilMatrixResultsExportExcel();
         $this->addTestPassMatrixWorkSheet($excel);
@@ -146,7 +126,7 @@ class ilExcelMatrixResultsExportBuilder extends ilTestExport
 
         foreach ($this->test_obj->getTestQuestions() as $q) {
             $question = assQuestion::instantiateQuestion($q['question_id']);
-            
+
             if (!$this->isSupportedQuestionType($question->getQuestionType())) {
                 continue;
             }

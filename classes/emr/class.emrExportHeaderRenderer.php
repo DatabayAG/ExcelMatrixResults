@@ -119,7 +119,7 @@ class emrExportHeaderRenderer implements emrExcelRangeRenderer
         $col = 6;
 
         foreach ($this->getParticipantData()->getActiveIds() as $activeId) {
-            $workingTime = ilObjTest::_getWorkingTimeOfParticipantForPass(
+            $workingTime = $this->getTestObj()->getWorkingTimeOfParticipantForPass(
                 $activeId,
                 $this->getScoredPassLoopup()->get($activeId)
             );
